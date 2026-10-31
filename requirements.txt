@@ -10,3 +10,4 @@ jupyter
 nbformat
 fastapi==0.162.0
 uvicorn==0.54.0
+xgboost

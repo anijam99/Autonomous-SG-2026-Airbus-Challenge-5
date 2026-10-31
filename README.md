@@ -13,6 +13,18 @@
 | **Try it with your own data** | Web app → **⚡ Try the model** (upload a CSV), or `python scripts/predict.py your.csv --lead 6` |
 | **Run everything** | `python scripts/run_pipeline.py` then `python app/server.py` → http://localhost:8600 |
 
+
+## Run it
+```bash
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+echo "TYPESAFE_API_KEY=..." > .env                       # optional, enables Jev (git-ignored)
+# needs the organisers' Flight_Data_With_Weather_Final.csv in the repo root (included)
+.venv/bin/python scripts/run_pipeline.py                 # download → clean → Jev → train/evaluate (~20 min first run)
+.venv/bin/python scripts/run_pipeline.py --train KATL KDFW --holdout KDEN   # any ICAO codes
+.venv/bin/python app/server.py                           # → http://localhost:8600
+```
+
+
 ## Deliverables at a glance
 
 | # | Brief: want to see | Result (Jan–Jul 2025 test, never used for training) | Where |
@@ -26,6 +38,34 @@
 **Ablation for the main target** (PR-AUC at 6 h): schedule only 0.27 → + aircraft rotation & congestion 0.33 → + hourly weather file (≥ 3 h old) 0.33 → + TAF/LAMP/METAR/Jev forecasts 0.35. ORD, never trained on: 0.31 (historical rate 0.20).
 
 **How much does weather add?** Honestly, a modest amount overall: +0.024 PR-AUC at 6 h and +0.042 at 12 h (where aircraft rotation tells you less). In IFR/thunderstorm hours the model is much stronger (PR-AUC 0.49 vs 0.33 in fair weather, precision 44%). For capacity, the schedule explains most of the variance; weather and forecasts cut the error a further 10% overall and 17% in busy, bad-weather hours. Jev's reading of the TAF adds almost nothing to accuracy (8.35 → 8.36 RMSE overall, 13.00 → 12.87 in weather hours); it is there to explain the forecast text to the user.
+
+## Is it accurate, and is it over-fitting?
+**Scorecard** (main target, 6 h ahead, all ATL/DFW flights Jan–Jul 2025; 95% intervals from 500 bootstrap resamples of test days):
+
+| Accuracy | Precision | Recall | F1 | PR-AUC | ROC-AUC |
+|---|---|---|---|---|---|
+| 79% (78–80) | 31% (30–33) | 54% (52–56) | 0.40 (0.38–0.41) | 0.35 (0.33–0.37) | 0.76 (0.75–0.77) |
+
+Accuracy is shown, but it is the wrong headline: only 13% of flights are > 45 min late, so "always on time" scores 87% accuracy while catching none of them. Precision and recall are what to judge it on.
+
+**Monte Carlo cross-validation (20 refits)** (notebook §4b). Each refit trains on a random 70% of 2023–24 *days* (whole days, so one storm never sits on both sides), with a new seed, and is scored on its own training days, on the 30% of days it never saw, and on 2025:
+
+| PR-AUC | mean | sd | range |
+|---|---|---|---|
+| days it trained on | 0.490 | 0.007 | 0.481–0.503 |
+| held-out 2023–24 days | 0.333 | 0.017 | 0.302–0.361 |
+| 2025 test | 0.350 | 0.002 | 0.346–0.354 |
+
+Reading it honestly: the trees fit their own training days much better than new days (gap 0.16), which is memorisation, so training scores are never quoted. The numbers we report are out-of-sample: unseen 2023–24 days and 2025 agree, and 2025 barely moves between refits (±0.002 PR-AUC; precision 31.0% ± 0.1, recall 53.8% ± 0.2). Stronger regularisation (fewer leaves, larger leaves) might narrow the gap without losing test skill; that is the next experiment.
+
+**Why LightGBM and not XGBoost.** Same rows, features, validation set and early stopping (notebook §4b):
+
+| | PR-AUC | ROC-AUC | Precision / recall at same alert rate | Train time |
+|---|---|---|---|---|
+| LightGBM (shipped) | 0.355 | 0.761 | 31.3% / 54.3% | 29 s |
+| XGBoost (hist) | 0.354 | 0.760 | 31.2% / 54.0% | 123 s |
+
+Accuracy is a tie. LightGBM trains 4.3× faster (which is what makes 20 Monte Carlo refits and the ablations cheap), handles the airline and route categories natively, and gives the exact per-flight contributions shown as "reasons" in the app.
 
 ## How the brief is covered
 
@@ -99,15 +139,13 @@ flowchart LR
 ## Licence
 MIT (see `LICENSE`).
 
-## Run it
+## Deploy (Docker / Coolify)
+The image serves the web app only; models and the data it reads are prebuilt in `data/` and committed.
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-echo "TYPESAFE_API_KEY=..." > .env                       # optional, enables Jev (git-ignored)
-# needs the organisers' Flight_Data_With_Weather_Final.csv in the repo root (included)
-.venv/bin/python scripts/run_pipeline.py                 # download → clean → Jev → train/evaluate (~20 min first run)
-.venv/bin/python scripts/run_pipeline.py --train KATL KDFW --holdout KDEN   # any ICAO codes
-.venv/bin/python app/server.py                           # → http://localhost:8600
+docker build -t runway-outlook .
+docker run -p 8600:8600 runway-outlook          # → http://localhost:8600
 ```
+**Coolify:** New resource → your Git repo → Build pack **Dockerfile** → port **8600** (health check: `/api/meta`). Optional env var `TYPESAFE_API_KEY` enables live Jev briefs; everything else works without it. `HOST`/`PORT` can be overridden.
 
 ## Repository map
 | Path | What |
@@ -122,5 +160,6 @@ echo "TYPESAFE_API_KEY=..." > .env                       # optional, enables Jev
 | `scripts/export_feature_store.py` | Airport-hour feature store (2023–2025) used to score uploaded flights |
 | `app/server.py` · `app/web/` | FastAPI + D3 web app (front page, Flights at risk, Try the model, Capacity outlook, Performance, Impact, Data) |
 | `JUDGING.md` · `PITCH.md` · `PLAN.md` | Rubric self-assessment · 3-minute demo script · plan and research notes |
+| `Dockerfile` · `requirements-app.txt` | Web-app container (Coolify-ready) and its runtime dependencies |
 
 *Data: organisers' Challenge 5 files (hourly weather ATL/DFW, data guide; fetched by `download_data.py --only challenge`); Meteostat; US DOT BTS On-Time Performance; Iowa Environmental Mesonet (METAR, TAF, LAMP archives); NOAA NCEI Storm Events; OurAirports. Fuel and cost assumptions: EUROCONTROL Standard Inputs v10, Airlines for America (2024).*

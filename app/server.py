@@ -138,12 +138,14 @@ def meta():
                                 "nominal": CONF["nominal"][a], "trained": a in C.TRAIN_AIRPORTS,
                                 "lat": C._AP[a]["lat"], "lon": C._AP[a]["lon"]} for a in AIRPORTS],
                   "range": {"min": "2025-01-02", "max": "2025-07-29"}, "presets": presets,
-                  "jev_enabled": (ROOT / ".env").exists(), "alert_ratio": CONF["alert_ratio"], "model_version": MODEL_VERSION,
+                  "jev_enabled": (ROOT / ".env").exists() or bool(__import__("os").environ.get("TYPESAFE_API_KEY")), "alert_ratio": CONF["alert_ratio"], "model_version": MODEL_VERSION,
                   "integration": METRICS.get("integration", {}),
                   "metrics_headline": {"main": [r for r in METRICS.get("main_test", []) if r["lead_h"] == 6], "threshold": THR,
                                        "excluded": METRICS.get("main_excluded_cancelled_diverted"),
                                        "rmse": METRICS["aar_rmse_test"][-1], "baselines": METRICS["aar_rmse_test"][:4],
-                                       "storm": METRICS["storm_lead_time"], "clf6": [r for r in METRICS["clf_test"] if r["lead_h"] == 6]}})
+                                       "storm": METRICS["storm_lead_time"], "clf6": [r for r in METRICS["clf_test"] if r["lead_h"] == 6],
+                                       "monte_carlo": METRICS.get("monte_carlo"), "bootstrap": METRICS.get("bootstrap_ci_lead6"),
+                                       "xgb": METRICS.get("xgb_compare")}})
 
 
 @app.get("/api/outlook")
@@ -474,6 +476,15 @@ def decisions():
 app.mount("/static", StaticFiles(directory=WEB), name="static")
 
 
+@app.middleware("http")
+async def no_stale_frontend(request: Request, call_next):
+    """Browsers revalidate the page and its scripts on every load, so a code change shows up on refresh."""
+    resp = await call_next(request)
+    if request.url.path == "/" or request.url.path.startswith("/static/"):
+        resp.headers["Cache-Control"] = "no-cache"
+    return resp
+
+
 @app.get("/")
 def index():
     return FileResponse(WEB / "index.html")
@@ -481,4 +492,5 @@ def index():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8600, log_level="warning")
+    import os
+    uvicorn.run(app, host=os.environ.get("HOST", "127.0.0.1"), port=int(os.environ.get("PORT", 8600)), log_level="warning")

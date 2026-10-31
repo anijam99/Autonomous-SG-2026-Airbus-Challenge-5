@@ -1,0 +1,17 @@
+.venv/
+.git/
+.env
+.taste-skill/
+logs/
+**/__pycache__/
+.ipynb_checkpoints/
+*.ipynb
+docs/
+assets/
+data/external/lamp/
+data/external/taf/
+data/external/storms/
+data/external/ourairports/airports.csv
+data/processed/flights_clean_all.parquet
+data/processed/flights_clean_hubs.csv
+*.pdf

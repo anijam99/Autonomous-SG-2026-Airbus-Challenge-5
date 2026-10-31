@@ -10,6 +10,10 @@ const Hero = (() => {
   const SPEED = 9, SIM_PER_SEC = 7.5;              // px per sim-minute along paths; sim minutes per real second
   let raf, st;
 
+  const KEY = "scopeRuns.v1";
+  const load = () => { try { const r = JSON.parse(localStorage.getItem(KEY)); return r && r.react && r.fc ? r : null; } catch { return null; } };
+  const save = r => { try { localStorage.setItem(KEY, JSON.stringify(r)); } catch {} };
+
   function reset(mode, keepRuns) {
     st = { ...st, mode, t: 0, planes: [], nextFree: 0, acc: 0, backlog: 0, held: 0, holdMin: 0, groundMin: 0, landed: 0,
            runs: keepRuns ? st.runs : { react: null, fc: null } };
@@ -107,8 +111,11 @@ const Hero = (() => {
     st.holdMin += holding * dt; st.held = holding;
     st.planes = st.planes.filter(p => p.phase !== "done");
     if (st.t >= CYCLE) {
-      st.runs[st.mode] = { hold: st.holdMin, ground: st.groundMin, landed: st.landed };
-      reset(st.mode === "react" ? "fc" : "react", true);
+      if (!st.done) {
+        st.runs[st.mode] = { hold: st.holdMin, ground: st.groundMin, landed: st.landed };
+        if (st.runs.react && st.runs.fc) { st.done = true; save(st.runs); }
+      }
+      reset(st.mode === "react" ? "fc" : "react", true);   // the scope keeps playing; finished results stay fixed
     }
   }
 
@@ -214,13 +221,23 @@ const Hero = (() => {
         return `<div style="display:flex;justify-content:space-between;color:var(--muted)"><span>${lab}: ${active ? "simulating…" : "waiting to simulate"}</span><span>${active ? Math.floor(p) + "%" : ""}</span></div>
           <div class="sim-track"><div class="sim-fill" style="width:${p}%;background:${col}"></div></div>`;
       };
-      el.innerHTML = `<div style="margin-bottom:6px;color:#a39d96">Same storm, two strategies</div>` + row("Reactive (today)", r, AMBER, "react") + row("With forecast", f, GREEN, "fc");
+      const html = `<div style="margin-bottom:6px;color:#a39d96;display:flex;justify-content:space-between;gap:12px"><span>Same storm, two strategies${st.done ? " · complete" : ""}</span>${st.done ? '<button type="button" class="sim-restart" data-act="restart">↻ Restart simulation</button>' : ""}</div>`
+        + row("Reactive (today)", r, AMBER, "react") + row("With forecast", f, GREEN, "fc");
+      if (html !== st.panel) { el.innerHTML = html; st.panel = html; }
     }
   }
 
   function start(cv) {
     stop();
     st = {}; reset("react");
+    const cached = load();
+    if (cached) { st.runs = cached; st.done = true; }
+    const panel = document.getElementById("h-runs");
+    if (panel) panel.onclick = e => {
+      if (!e.target.closest("[data-act=restart]")) return;
+      try { localStorage.removeItem(KEY); } catch {}
+      st.done = false; st.panel = null; reset("react"); st.runs = { react: null, fc: null };
+    };
     const ctx = cv.getContext("2d");
     let last = performance.now(), sweep = 0, g;
     const fit = () => { const d = devicePixelRatio || 1; cv.width = cv.clientWidth * d; cv.height = cv.clientHeight * d; ctx.setTransform(d, 0, 0, d, 0, 0); g = geom(cv); };

@@ -75,6 +75,12 @@ async function overview(v) {
       </div>
     </section>
 
+    <section class="fp-flow" aria-labelledby="flow-h">
+      <div class="head in-up"><h2 id="flow-h">how it all fits</h2>
+        <p>Public data goes in on the left. Nothing newer than the forecast time gets past the feature builder. Statistics make every number, fixed rules turn them into suggestions, and a person makes the call.</p></div>
+      <div class="in-up d1">${flowDiagram({ flights: f1(flightsM), prauc: f2(mm["PR-AUC"] || 0), recall: pct(mm.recall || 0), rmse: f1(mod["all hours"]), mc: 20 })}</div>
+    </section>
+
     <section class="fp-feat" aria-label="What the brief asked for">
       ${[["joins flights to their weather", `${f1(flightsM)} million BTS flights meet the organisers' hourly weather by airport and hour; their own sample rows match ours 99.99%. <a href="#/data">See the data</a>`, true],
          ["flags flights heading for 45 minutes", `Precision ${pct(mm.precision || 0)} and recall ${pct(mm.recall || 0)} six hours ahead, against ${pct(mh.precision || 0)} and ${pct(mh.recall || 0)} for the historical rate. <a href="#/departures?ap=KATL&d=2025-06-27&h=14&r=1">Flights at risk</a>`, true],
@@ -91,6 +97,8 @@ async function overview(v) {
         <figcaption>An A319 at Hamburg, held two hours for a thunderstorm: the kind of flight these numbers are about.</figcaption></figure></div>
       <dl class="ledger">${ledger.map(([[w, d], c, s]) => `<div class="lrow in-up"><dt class="c">${c}<span class="soft">${s}</span></dt><dd class="w">${w}${d}</dd></div>`).join("")}</dl>
     </section>
+
+    ${scorecard(H, mm, mh)}
 
     <section class="fp-notes">
       <div class="in-up"><h2>what we assumed</h2><ul>
@@ -165,4 +173,51 @@ async function overview(v) {
   show(0);
   const so = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) show(+e.target.dataset.s); }), { rootMargin: "-45% 0px -45% 0px" });
   v.querySelectorAll(".fp-steps .st").forEach(s => so.observe(s));
+}
+
+/* Model scorecard: every headline metric with its 95% interval, the accuracy trap, and the over-fitting check */
+function scorecard(H, mm, mh) {
+  const all = H.main.filter(r => r.scope === "ATL+DFW"), on = all.find(r => r.model === "Always 'on time'") || {};
+  const ci = Object.fromEntries((H.bootstrap || []).map(r => [r.metric, r]));
+  const band = k => ci[k] ? `<span class="ci">95% CI ${k.includes("AUC") ? f2(ci[k]["2.5%"]) : pct(ci[k]["2.5%"])}–${k.includes("AUC") ? f2(ci[k]["97.5%"]) : pct(ci[k]["97.5%"])}</span>` : "";
+  const cells = [
+    ["accuracy", pct(mm.accuracy || 0), `"always on time" scores ${pct(on.accuracy || 0)}`, "accuracy"],
+    ["precision", pct(mm.precision || 0), `historical rate ${pct(mh.precision || 0)}`, "precision"],
+    ["recall", pct(mm.recall || 0), `historical rate ${pct(mh.recall || 0)}`, "recall"],
+    ["F1", f2(mm.F1 || 0), `historical rate ${f2(mh.F1 || 0)}`, "F1"],
+    ["PR-AUC", f2(mm["PR-AUC"] || 0), `historical rate ${f2(mh["PR-AUC"] || 0)}; random ${f2(mm["base rate"] || 0)}`, "PR-AUC"],
+    ["ROC-AUC", f2(mm["ROC-AUC"] || 0), `historical rate ${f2(mh["ROC-AUC"] || 0)}; random 0.50`, "ROC-AUC"]];
+  const mc = H.monte_carlo, xg = H.xgb;
+  let mcHtml = "";
+  if (mc) {
+    const runs = mc.runs_table, keys = [["PR-AUC fitted", "fitted on", "#e5566f"], ["PR-AUC held-out days", "held-out days", "#3987e5"], ["PR-AUC 2025 test", "2025 test", "#3fc07a"]];
+    const vals = runs.flatMap(r => keys.map(k => r[k[0]])), lo = Math.floor(Math.min(...vals) * 50) / 50, hi = Math.ceil(Math.max(...vals) * 50) / 50;
+    const X = v => 150 + (v - lo) / (hi - lo) * 520;
+    const mean = k => runs.reduce((a, r) => a + r[k], 0) / runs.length;
+    const strips = keys.map(([k, lab, col], i) => `<text x="0" y="${34 + i * 38}" class="sc-lab">${lab}</text>` +
+      runs.map(r => `<circle cx="${X(r[k])}" cy="${30 + i * 38}" r="5" fill="${col}" fill-opacity=".75"/>`).join("") +
+      `<text x="690" y="${34 + i * 38}" class="sc-v">${f3(mean(k))}</text>`).join("");
+    const ticks = d3.range(lo, hi + 1e-9, (hi - lo) / 4).map(t => `<text x="${X(t)}" y="138" class="sc-t" text-anchor="middle">${f2(t)}</text>`).join("");
+    mcHtml = `<div class="sc-mc"><h3>is it over-fitting?</h3>
+      <p class="soft">${mc.runs} Monte Carlo refits. Each one trains on a random 70% of 2023–24 days and is scored on the days it trained on, the 30% of days it never saw, and 2025. Each dot is one refit (PR-AUC).</p>
+      <svg viewBox="0 0 760 150" class="sc-svg" role="img" aria-label="PR-AUC of 20 refits on fitted, held-out and test data">${strips}${ticks}</svg>
+      <p>Trees fit the days they trained on far better (<b>${f3(mean("PR-AUC fitted"))}</b>) than days they never saw (<b>${f3(mean("PR-AUC held-out days"))}</b>): a gap of ${f3(mc.gap_mean)}. That is memorisation, so we never quote training scores. What matters is that unseen 2023–24 days and 2025 agree (${f3(mean("PR-AUC held-out days"))} vs ${f3(mean("PR-AUC 2025 test"))}), and 2025 barely moves between refits (±${f3(mc.summary.find(r => r.metric === "PR-AUC 2025 test")?.std || 0)}): the reported numbers are what to expect on new data. Stronger regularisation (fewer leaves) could narrow the gap; it is the next thing we would try.</p></div>`;
+  }
+  const xgHtml = xg ? `<div class="sc-xg"><h3>why lightgbm, not xgboost</h3><table><tr><th></th><th>PR-AUC</th><th>ROC-AUC</th><th>train time</th></tr>
+      ${xg.map(r => `<tr><td>${r.model}</td><td>${f3(r["PR-AUC"])}</td><td>${f3(r["ROC-AUC"])}</td><td>${Math.round(r["train seconds"])} s</td></tr>`).join("")}</table>
+      <p class="soft">Same rows, features and early stopping. ${xgVerdict(xg)}</p></div>` : "";
+  return `<section class="fp-score" aria-labelledby="score-h">
+    <div class="head in-up"><h2 id="score-h">the scorecard</h2><p class="soft">Main target, 6 h ahead, every ATL and DFW flight Jan–Jul 2025, never used in training. Intervals: 500 bootstrap resamples of test days.</p></div>
+    <div class="sc-grid in-up d1">${cells.map(([k, v, s, key]) => `<div class="sc-cell"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div>${band(key)}</div>`).join("")}</div>
+    <p class="sc-note in-up">Accuracy looks worse than "always on time" because only ${pct(mm["base rate"] || 0)} of flights are over 45 minutes late: a model that never flags anything is ${pct(on.accuracy || 0)} accurate and catches none of them. That is why precision and recall are the numbers to judge it on.</p>
+    <div class="sc-two in-up">${mcHtml}${xgHtml}</div>
+  </section>`;
+}
+
+function xgVerdict(xg) {
+  const l = xg.find(r => r.model.startsWith("LightGBM")), x = xg.find(r => r.model.startsWith("XGBoost"));
+  if (!l || !x) return "";
+  const d = x["PR-AUC"] - l["PR-AUC"], speed = x["train seconds"] / Math.max(l["train seconds"], 1);
+  const acc = Math.abs(d) < 0.005 ? "Accuracy is a tie" : d > 0 ? `XGBoost is ${f3(d)} PR-AUC better, a small margin` : `LightGBM is ${f3(-d)} PR-AUC better`;
+  return `${acc}. LightGBM trains ${speed >= 1.2 ? `${f1(speed)}× faster` : "about as fast"}, handles the airline and airport categories natively, and gives the per-flight reasons the board shows.`;
 }

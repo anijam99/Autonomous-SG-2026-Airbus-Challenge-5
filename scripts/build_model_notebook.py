@@ -325,6 +325,90 @@ METRICS["main_importance_top"] = {C.label(k_): round(v, 4) for k_, v in (mg / mg
 display(pd.Series(METRICS["main_importance_groups"]).to_frame("share of gain"))
 """)
 md(r"""
+### 4b. Is it over-fitting? Monte Carlo cross-validation, bootstrap intervals and an XGBoost comparison
+
+* **Monte Carlo cross-validation (20 runs).** Each run draws a random 70% of the training-period *days* to fit on and keeps the other 30% of days as an in-period hold-out (whole days, so flights from the same storm never sit on both sides). The model is refitted with the same settings and a new random seed, then scored on the rows it was fitted on, on the held-out days, and on the 2025 test period. A large gap between "fitted" and "held-out" means memorising; a wide spread across runs means the result depends on luck.
+* **Bootstrap (500 resamples of test days)** gives 95% intervals for the headline test metrics.
+* **XGBoost vs LightGBM** on identical rows, features, validation and early stopping.
+""")
+code(r"""
+from sklearn.metrics import average_precision_score as _ap, roc_auc_score as _auc
+F = C.MAIN_FEATURES; NTREE = main.best_iteration
+T6 = mrows(lab[(lab.split == "test") & lab.airport.isin(TRAIN_AIRPORTS)], lead=6)
+alert = float((miso.predict(main.predict(T6[F])) >= THR).mean())      # shipped model's alert rate
+def at_rate(y, p, rate):
+    q = np.quantile(p, 1 - rate); a = p >= q; tp = (a & (y == 1)).sum()
+    return tp / max(a.sum(), 1), tp / max((y == 1).sum(), 1)
+days = MTR.hour.dt.floor("D"); udays = days.unique()
+cats = [f for f in F if f in ("carrier", "other")]
+mc, t0 = [], time.time()
+for i in range(20):
+    r = np.random.default_rng(100 + i)
+    fit_days = set(r.choice(udays, int(0.7 * len(udays)), replace=False))
+    m_fit = days.isin(fit_days).values
+    A, B = MTR[m_fit], MTR[~m_fit]
+    mdl = lgb.train({**MPARAMS, "seed": 100 + i}, lgb.Dataset(A[F], A.y45, categorical_feature=cats), NTREE)
+    As = A.sample(min(len(A), 200_000), random_state=i)
+    row = {"run": i + 1}
+    for nm, D in {"fitted": As, "held-out days": B, "2025 test": T6}.items():
+        p_ = mdl.predict(D[F]); y_ = D.y45.values.astype(int)
+        row[f"PR-AUC {nm}"] = _ap(y_, p_); row[f"ROC-AUC {nm}"] = _auc(y_, p_)
+        if nm == "2025 test":
+            row["precision 2025 test"], row["recall 2025 test"] = at_rate(y_, p_, alert)
+    mc.append(row)
+mc = pd.DataFrame(mc)
+print(f"20 Monte Carlo refits in {time.time() - t0:.0f}s")
+summ = mc.drop(columns="run").agg(["mean", "std", "min", "max"]).T.round(4)
+display(summ)
+gap = mc["PR-AUC fitted"] - mc["PR-AUC held-out days"]
+print(f"Fitted minus held-out PR-AUC: mean {gap.mean():.3f} (sd {gap.std():.3f}); "
+      f"held-out days vs 2025 test: {mc['PR-AUC held-out days'].mean():.3f} vs {mc['PR-AUC 2025 test'].mean():.3f}")
+fig, ax = plt.subplots(figsize=(7, 3))
+for c_, col in [("PR-AUC fitted", "#e5566f"), ("PR-AUC held-out days", "#3987e5"), ("PR-AUC 2025 test", "#3fc07a")]:
+    ax.hist(mc[c_], bins=10, alpha=.75, label=c_.replace("PR-AUC ", ""), color=col)
+ax.set_xlabel("PR-AUC (6 h ahead on test; random leads in training period)"); ax.legend(); plt.show()
+METRICS["monte_carlo"] = {"runs": 20, "trees": int(NTREE), "alert_rate": round(alert, 3),
+                          "summary": summ.reset_index().rename(columns={"index": "metric"}).to_dict(orient="records"),
+                          "runs_table": mc.round(4).to_dict(orient="records"),
+                          "gap_mean": round(float(gap.mean()), 4), "gap_sd": round(float(gap.std()), 4)}
+""")
+code(r"""
+# Bootstrap 95% intervals for the shipped model on 2025 test (resampling whole days)
+k6 = keep6[keep6.airport.isin(TRAIN_AIRPORTS)].copy(); k6["day"] = k6.hour.dt.floor("D")
+groups = [g for _, g in k6.groupby("day")]; rb = np.random.default_rng(5); bs = []
+for _ in range(500):
+    s_ = pd.concat([groups[j] for j in rb.integers(0, len(groups), len(groups))])
+    m_ = main_metrics(s_.y45.values, s_.p.values, THR)
+    bs.append({k_: m_[k_] for k_ in ("accuracy", "precision", "recall", "F1", "PR-AUC", "ROC-AUC")})
+bs = pd.DataFrame(bs)
+point = main_metrics(k6.y45.values, k6.p.values, THR)
+ci = pd.DataFrame({"value": {k_: point[k_] for k_ in bs.columns}, "2.5%": bs.quantile(.025), "97.5%": bs.quantile(.975)}).round(3)
+display(ci)
+METRICS["bootstrap_ci_lead6"] = ci.reset_index().rename(columns={"index": "metric"}).to_dict(orient="records")
+""")
+code(r"""
+# XGBoost vs LightGBM: same rows, features, validation set and early stopping
+try:
+    import xgboost as xgb
+    t0 = time.time()
+    xm = xgb.XGBClassifier(tree_method="hist", enable_categorical=True, max_depth=8, learning_rate=0.05, n_estimators=3000,
+                           subsample=0.8, colsample_bytree=0.8, min_child_weight=50, reg_lambda=5.0, max_cat_to_onehot=8,
+                           early_stopping_rounds=100, eval_metric="logloss", n_jobs=-1, random_state=7)
+    xm.fit(MTR[F], MTR.y45, eval_set=[(MVA[F], MVA.y45)], verbose=False)
+    xt = time.time() - t0
+    t0 = time.time(); _ = fit_main(F); lt = time.time() - t0
+    yt = T6.y45.values.astype(int); px = xm.predict_proba(T6[F])[:, 1]; pl = main.predict(T6[F])
+    rows_ = []
+    for nm, p_, tt, nt in [("LightGBM (shipped)", pl, lt, main.best_iteration), ("XGBoost (hist)", px, xt, xm.best_iteration)]:
+        pr, rc = at_rate(yt, p_, alert)
+        rows_.append({"model": nm, "PR-AUC": _ap(yt, p_), "ROC-AUC": _auc(yt, p_), "precision @ same alert rate": pr,
+                      "recall @ same alert rate": rc, "train seconds": tt, "trees": int(nt)})
+    xc = pd.DataFrame(rows_).round(3); display(xc)
+    METRICS["xgb_compare"] = xc.to_dict(orient="records")
+except ImportError:
+    print("xgboost not installed: comparison skipped")
+""")
+md(r"""
 ## 5. Bonus: arrival-capacity model (AAR)
 
 ### 5a. Baselines (what the model has to beat)

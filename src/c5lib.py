@@ -644,7 +644,7 @@ MAIN_GROUPS = {
     "hourly_wx": FEATURES_WX,
     "forecasts": FEATURES_METAR + FEATURES_TAF + FEATURES_LAMP + FEATURE_GROUPS.get("jev", []),
 }
-FEATURE_LABELS.update({"is_arrival": "Arrival (vs departure)", "other": "Other airport", "hour_local_f": "Scheduled hour (local)",
+FEATURE_LABELS.update({"is_arrival": "Arriving or departing", "other": "Route (origin / destination)", "hour_local_f": "Scheduled hour (local)",
                        "own_departed": "This flight already departed (at issue)", "own_dep_delay_known": "This flight's departure delay (known at issue)"})
 
 

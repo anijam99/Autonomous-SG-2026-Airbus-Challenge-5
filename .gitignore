@@ -4,6 +4,12 @@ __pycache__/
 .DS_Store
 logs/
 # downloaded raw public data (re-created by scripts/download_data.py)
-data/external/
+data/external/*
+# ...except the small files the web app reads at runtime (needed for Docker / Coolify builds from git)
+!data/external/metar/
+!data/external/meteostat/
+!data/external/bts/
+!data/external/ourairports/
+data/external/ourairports/airports.csv
 .env
 .taste-skill/
