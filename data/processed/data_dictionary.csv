@@ -1,0 +1,70 @@
+column,role,dtype,null_frac,description
+FL_DATE,id,str,0.0,"Scheduled departure date, local time at origin"
+OP_UNIQUE_CARRIER,schedule,category,0.0,Marketing/operating carrier code
+OP_CARRIER_FL_NUM,id,int32,0.0,Flight number
+TAIL_NUM,schedule,str,0.0022,Aircraft registration; links consecutive legs for delay propagation
+ORIGIN,schedule,category,0.0,Origin airport (IATA)
+DEST,schedule,category,0.0,Destination airport (IATA)
+origin_icao,id,category,0.0,ICAO code from airportsdata
+dest_icao,id,category,0.0,ICAO code from airportsdata
+hub_role,id,category,0.0,hub_departure / hub_arrival / both / non_hub
+origin_tz,schedule,category,0.0,IANA time zone
+dest_tz,schedule,category,0.0,IANA time zone
+origin_runway_heading_deg,schedule,float64,0.8911,Assumed runway heading (brief); NaN for non-hubs
+dest_runway_heading_deg,schedule,float64,0.9362,Assumed runway heading (brief); NaN for non-hubs
+CRS_DEP_TIME,schedule,int64,0.0,"Scheduled departure, local hhmm"
+CRS_ARR_TIME,schedule,int64,0.0,"Scheduled arrival, local hhmm at destination"
+CRS_ELAPSED_TIME,schedule,float64,0.0,"Scheduled block time, minutes"
+DISTANCE,schedule,float64,0.0,"Great-circle distance, miles"
+sched_dep_utc,schedule,"datetime64[ns, UTC]",0.0,"Scheduled departure, UTC"
+sched_arr_utc,schedule,"datetime64[ns, UTC]",0.0,"Scheduled departure + CRS_ELAPSED_TIME, UTC"
+sched_dep_local,schedule,datetime64[ns],0.0,"Scheduled departure, origin local"
+sched_arr_local,schedule,datetime64[ns],0.0,"Scheduled arrival, destination local"
+sched_dep_hour_local,schedule,int8,0.0,0-23
+sched_arr_hour_local,schedule,int8,0.0,0-23
+month,schedule,int8,0.0,1-12
+day_of_week,schedule,int8,0.0,0 = Monday
+dep_severe_45,target,Int8,0.0123,DEP_DELAY > 45 min; NA if not departed
+arr_severe_45,target,Int8,0.0154,ARR_DELAY > 45 min; NA if not arrived
+disrupted_45,target,int8,0.0,Severe dep delay OR cancelled OR diverted (recommended main label)
+cancelled_weather,target,int8,0.0,Cancelled with code B (weather)
+DEP_TIME,outcome,float64,0.0123,"Actual departure, local hhmm"
+DEP_DELAY,outcome,float64,0.0123,"Departure delay, minutes (negative = early)"
+TAXI_OUT,outcome,float64,0.0127,Taxi-out minutes; a ground-congestion signal when lagged
+WHEELS_OFF,outcome,float64,0.0127,"Wheels-off, local hhmm"
+WHEELS_ON,outcome,float64,0.0131,"Wheels-on, local hhmm at destination"
+TAXI_IN,outcome,float64,0.0131,Taxi-in minutes
+ARR_TIME,outcome,float64,0.0131,"Actual arrival, local hhmm"
+ARR_DELAY,outcome,float64,0.0154,"Arrival delay, minutes"
+actual_dep_utc,outcome,"datetime64[ns, UTC]",0.0123,sched_dep_utc + DEP_DELAY
+actual_arr_utc,outcome,"datetime64[ns, UTC]",0.0154,sched_arr_utc + ARR_DELAY
+ACTUAL_ELAPSED_TIME,outcome,float64,0.0154,"Actual block time, minutes"
+AIR_TIME,outcome,float64,0.0154,Airborne minutes; includes holding
+CANCELLED,outcome,int8,0.0,1 = cancelled
+CANCELLATION_CODE,outcome,category,0.9872,"A carrier, B weather, C NAS, D security"
+DIVERTED,outcome,int8,0.0,1 = diverted
+CARRIER_DELAY,outcome,float64,0.0154,Cause minutes (BTS fills only when ARR_DELAY >= 15)
+WEATHER_DELAY,outcome,float64,0.0154,"Cause minutes, extreme weather"
+NAS_DELAY,outcome,float64,0.0154,"Cause minutes, National Airspace System (includes non-extreme weather/ATC programs)"
+SECURITY_DELAY,outcome,float64,0.0154,Cause minutes
+LATE_AIRCRAFT_DELAY,outcome,float64,0.0154,"Cause minutes, late inbound aircraft"
+origin_wx_temp_c,weather,float64,0.0,"Origin airport (Meteostat via provided file): Air temperature, °C"
+origin_wx_precip_mm,weather,float64,0.0,"Origin airport (Meteostat via provided file): Precipitation in the hour, mm"
+origin_wx_wind_kmh,weather,float64,0.0,"Origin airport (Meteostat via provided file): Mean wind speed, km/h"
+origin_wx_gust_kmh,weather,float64,0.9783,"Origin airport (Meteostat via provided file): Peak gust, km/h (NaN = not reported)"
+origin_wx_pres_hpa,weather,float64,0.0,"Origin airport (Meteostat via provided file): Sea-level pressure, hPa"
+origin_wx_cond_code,weather,Int8,0.0077,Origin airport (Meteostat via provided file): Meteostat condition code 1-27
+origin_wx_wind_kt,weather,float64,0.0,"Origin airport (Meteostat via provided file): Mean wind speed, knots"
+origin_wx_cond_group,weather,category,0.0077,Origin airport (Meteostat via provided file): none / rain / winter / low_visibility / convective
+origin_wx_obs_utc,weather,"datetime64[us, UTC]",0.0,Origin airport (Meteostat via provided file): TRUE observation time of this snapshot (see section 6)
+origin_wx_age_h,weather,float64,0.0,Origin airport (Meteostat via provided file): Hours between observation and the scheduled event; valid for horizon k only if age >= k
+dest_wx_temp_c,weather,float64,0.0,"Dest airport (Meteostat via provided file): Air temperature, °C"
+dest_wx_precip_mm,weather,float64,0.0,"Dest airport (Meteostat via provided file): Precipitation in the hour, mm"
+dest_wx_wind_kmh,weather,float64,0.0,"Dest airport (Meteostat via provided file): Mean wind speed, km/h"
+dest_wx_gust_kmh,weather,float64,0.975,"Dest airport (Meteostat via provided file): Peak gust, km/h (NaN = not reported)"
+dest_wx_pres_hpa,weather,float64,0.0,"Dest airport (Meteostat via provided file): Sea-level pressure, hPa"
+dest_wx_cond_code,weather,Int8,0.0125,Dest airport (Meteostat via provided file): Meteostat condition code 1-27
+dest_wx_wind_kt,weather,float64,0.0,"Dest airport (Meteostat via provided file): Mean wind speed, knots"
+dest_wx_cond_group,weather,category,0.0125,Dest airport (Meteostat via provided file): none / rain / winter / low_visibility / convective
+dest_wx_obs_utc,weather,"datetime64[us, UTC]",0.0,Dest airport (Meteostat via provided file): TRUE observation time of this snapshot (see section 6)
+dest_wx_age_h,weather,float64,0.0,Dest airport (Meteostat via provided file): Hours between observation and the scheduled event; valid for horizon k only if age >= k

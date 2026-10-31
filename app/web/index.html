@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Runway Capacity Outlook · Airbus Challenge 5</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&family=Figtree:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/front.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='13' y='2' width='6' height='28' rx='1' fill='%233987e5'/><g fill='%23f0efec'><rect x='15.3' y='6' width='1.4' height='4'/><rect x='15.3' y='14' width='1.4' height='4'/><rect x='15.3' y='22' width='1.4' height='4'/></g></svg>">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="14" fill="none" stroke="#383835" stroke-width="1.5"/>
+        <g transform="rotate(80 16 16)"><rect x="13.5" y="3" width="5" height="26" rx="1" fill="#3987e5"/>
+          <g fill="#f0efec"><rect x="15.4" y="7" width="1.2" height="3.5"/><rect x="15.4" y="14.2" width="1.2" height="3.5"/><rect x="15.4" y="21.5" width="1.2" height="3.5"/></g></g>
+      </svg>
+      <div><div class="brand-title">Runway capacity outlook</div><div class="brand-sub">Airbus Challenge 5 · delay risk 3–12 h ahead</div></div>
+    </div>
+    <nav id="nav">
+      <a href="#/overview" data-r="overview">Overview</a>
+      <a href="#/departures" data-r="departures">Flights at risk</a>
+      <a href="#/try" data-r="try" class="try">Try the model</a>
+      <a href="#/outlook" data-r="outlook">Capacity outlook</a>
+      <a href="#/performance" data-r="performance">Performance</a>
+      <a href="#/impact" data-r="impact">Impact</a>
+      <a href="#/data" data-r="data">Data</a>
+    </nav>
+    <div class="chips" id="airports"></div>
+  </header>
+
+  <section class="replay" id="replay">
+    <label>Replay date <input type="date" id="date"></label>
+    <label>Now <input type="range" id="hour" min="0" max="23" step="1"><span class="clock" id="hourlbl"></span></label>
+    <label>Jump to storm <select id="preset"></select></label>
+    <label class="toggle"><input type="checkbox" id="reveal" checked><span class="sw"></span>Show what happened</label>
+    <label class="toggle" title="Demo the decline behaviour: pretend the TAF feed stopped 8 h ago"><input type="checkbox" id="stale"><span class="sw"></span>Simulate TAF outage</label>
+    <div class="issued"><div class="big" id="issued">—</div><div class="small">forecast issue time · 2025 test period (unseen by models)</div></div>
+  </section>
+
+  <main id="view"><div class="loading">Loading…</div></main>
+  <div class="footer">Numbers: LightGBM models + fixed rules · Text reading: Jev (TypeSafe System One) · The traffic manager decides.
+    Data: US DOT BTS, Iowa Environmental Mesonet (METAR/TAF/LAMP), NOAA NCEI Storm Events, OurAirports.</div>
+  <div class="tip" id="tip"></div>
+  <script src="/static/vendor/d3.v7.min.js"></script>
+  <script src="/static/charts.js"></script>
+  <script src="/static/hero.js"></script>
+  <script src="/static/app.js"></script>
+  <script src="/static/front.js"></script>
+</body>
+</html>

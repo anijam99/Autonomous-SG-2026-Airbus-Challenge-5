@@ -1,0 +1,1972 @@
+{
+  "integration": {
+    "provided_rows_found": 0.9999,
+    "dep_delay_identical": 1.0,
+    "bts_flights": 4630760
+  },
+  "nominal": {
+    "KATL": 79.0,
+    "KDFW": 78.0,
+    "KORD": 74.0
+  },
+  "input_skill_lead6": [
+    {
+      "index": "TAF thunderstorm (incl. TEMPO/PROB)",
+      "POD (share of events forecast)": 0.556,
+      "FAR (false alarm ratio)": 0.765,
+      "CSI": 0.198,
+      "events": 1127.0
+    },
+    {
+      "index": "LAMP lightning prob \u2265 20%",
+      "POD (share of events forecast)": 0.201,
+      "FAR (false alarm ratio)": 0.585,
+      "CSI": 0.156,
+      "events": 1127.0
+    },
+    {
+      "index": "TAF IFR or worse",
+      "POD (share of events forecast)": 0.663,
+      "FAR (false alarm ratio)": 0.387,
+      "CSI": 0.467,
+      "events": 5014.0
+    },
+    {
+      "index": "LAMP ceiling < 1000 ft or vis < 3 mi",
+      "POD (share of events forecast)": 0.657,
+      "FAR (false alarm ratio)": 0.363,
+      "CSI": 0.478,
+      "events": 5014.0
+    }
+  ],
+  "main_test": [
+    {
+      "lead_h": 3,
+      "scope": "ATL+DFW",
+      "model": "Always 'on time'",
+      "base rate": 0.127,
+      "accuracy": 0.873,
+      "precision": 0.0,
+      "recall": 0.0,
+      "F1": 0.0,
+      "PR-AUC": 0.127,
+      "ROC-AUC": 0.5,
+      "Brier": 0.127,
+      "flagged share": 0.0
+    },
+    {
+      "lead_h": 3,
+      "scope": "ATL+DFW",
+      "model": "Historical rate",
+      "base rate": 0.127,
+      "accuracy": 0.808,
+      "precision": 0.247,
+      "recall": 0.249,
+      "F1": 0.248,
+      "PR-AUC": 0.211,
+      "ROC-AUC": 0.647,
+      "Brier": 0.108,
+      "flagged share": 0.128
+    },
+    {
+      "lead_h": 3,
+      "scope": "ATL+DFW",
+      "model": "Schedule only",
+      "base rate": 0.127,
+      "accuracy": 0.766,
+      "precision": 0.253,
+      "recall": 0.43,
+      "F1": 0.319,
+      "PR-AUC": 0.268,
+      "ROC-AUC": 0.686,
+      "Brier": 0.104,
+      "flagged share": 0.216
+    },
+    {
+      "lead_h": 3,
+      "scope": "ATL+DFW",
+      "model": "+ ops (inbound aircraft, own departure, congestion)",
+      "base rate": 0.127,
+      "accuracy": 0.799,
+      "precision": 0.33,
+      "recall": 0.559,
+      "F1": 0.415,
+      "PR-AUC": 0.396,
+      "ROC-AUC": 0.779,
+      "Brier": 0.094,
+      "flagged share": 0.216
+    },
+    {
+      "lead_h": 3,
+      "scope": "ATL+DFW",
+      "model": "+ hourly weather file (\u2265 3 h old)",
+      "base rate": 0.127,
+      "accuracy": 0.801,
+      "precision": 0.333,
+      "recall": 0.565,
+      "F1": 0.419,
+      "PR-AUC": 0.398,
+      "ROC-AUC": 0.785,
+      "Brier": 0.094,
+      "flagged share": 0.216
+    },
+    {
+      "lead_h": 3,
+      "scope": "ATL+DFW",
+      "model": "+ TAF / LAMP / METAR / Jev (full model)",
+      "base rate": 0.127,
+      "accuracy": 0.804,
+      "precision": 0.341,
+      "recall": 0.58,
+      "F1": 0.43,
+      "PR-AUC": 0.401,
+      "ROC-AUC": 0.793,
+      "Brier": 0.093,
+      "flagged share": 0.216
+    },
+    {
+      "lead_h": 3,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "Always 'on time'",
+      "base rate": 0.132,
+      "accuracy": 0.868,
+      "precision": 0.0,
+      "recall": 0.0,
+      "F1": 0.0,
+      "PR-AUC": 0.132,
+      "ROC-AUC": 0.5,
+      "Brier": 0.132,
+      "flagged share": 0.0
+    },
+    {
+      "lead_h": 3,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "Historical rate",
+      "base rate": 0.132,
+      "accuracy": 0.805,
+      "precision": 0.263,
+      "recall": 0.267,
+      "F1": 0.265,
+      "PR-AUC": 0.222,
+      "ROC-AUC": 0.639,
+      "Brier": 0.111,
+      "flagged share": 0.134
+    },
+    {
+      "lead_h": 3,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "Schedule only",
+      "base rate": 0.132,
+      "accuracy": 0.753,
+      "precision": 0.252,
+      "recall": 0.445,
+      "F1": 0.322,
+      "PR-AUC": 0.292,
+      "ROC-AUC": 0.692,
+      "Brier": 0.106,
+      "flagged share": 0.232
+    },
+    {
+      "lead_h": 3,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "+ ops (inbound aircraft, own departure, congestion)",
+      "base rate": 0.132,
+      "accuracy": 0.785,
+      "precision": 0.321,
+      "recall": 0.567,
+      "F1": 0.41,
+      "PR-AUC": 0.408,
+      "ROC-AUC": 0.78,
+      "Brier": 0.097,
+      "flagged share": 0.232
+    },
+    {
+      "lead_h": 3,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "+ hourly weather file (\u2265 3 h old)",
+      "base rate": 0.132,
+      "accuracy": 0.784,
+      "precision": 0.319,
+      "recall": 0.563,
+      "F1": 0.407,
+      "PR-AUC": 0.409,
+      "ROC-AUC": 0.784,
+      "Brier": 0.096,
+      "flagged share": 0.232
+    },
+    {
+      "lead_h": 3,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "+ TAF / LAMP / METAR / Jev (full model)",
+      "base rate": 0.132,
+      "accuracy": 0.789,
+      "precision": 0.329,
+      "recall": 0.58,
+      "F1": 0.419,
+      "PR-AUC": 0.41,
+      "ROC-AUC": 0.788,
+      "Brier": 0.095,
+      "flagged share": 0.232
+    },
+    {
+      "lead_h": 3,
+      "scope": "ORD (unseen)",
+      "model": "Always 'on time'",
+      "base rate": 0.122,
+      "accuracy": 0.878,
+      "precision": 0.0,
+      "recall": 0.0,
+      "F1": 0.0,
+      "PR-AUC": 0.122,
+      "ROC-AUC": 0.5,
+      "Brier": 0.122,
+      "flagged share": 0.0
+    },
+    {
+      "lead_h": 3,
+      "scope": "ORD (unseen)",
+      "model": "Historical rate",
+      "base rate": 0.122,
+      "accuracy": 0.821,
+      "precision": 0.251,
+      "recall": 0.233,
+      "F1": 0.242,
+      "PR-AUC": 0.203,
+      "ROC-AUC": 0.643,
+      "Brier": 0.104,
+      "flagged share": 0.113
+    },
+    {
+      "lead_h": 3,
+      "scope": "ORD (unseen)",
+      "model": "Schedule only",
+      "base rate": 0.122,
+      "accuracy": 0.741,
+      "precision": 0.229,
+      "recall": 0.471,
+      "F1": 0.308,
+      "PR-AUC": 0.243,
+      "ROC-AUC": 0.678,
+      "Brier": 0.102,
+      "flagged share": 0.252
+    },
+    {
+      "lead_h": 3,
+      "scope": "ORD (unseen)",
+      "model": "+ ops (inbound aircraft, own departure, congestion)",
+      "base rate": 0.122,
+      "accuracy": 0.775,
+      "precision": 0.295,
+      "recall": 0.608,
+      "F1": 0.397,
+      "PR-AUC": 0.376,
+      "ROC-AUC": 0.777,
+      "Brier": 0.092,
+      "flagged share": 0.252
+    },
+    {
+      "lead_h": 3,
+      "scope": "ORD (unseen)",
+      "model": "+ hourly weather file (\u2265 3 h old)",
+      "base rate": 0.122,
+      "accuracy": 0.775,
+      "precision": 0.296,
+      "recall": 0.611,
+      "F1": 0.399,
+      "PR-AUC": 0.379,
+      "ROC-AUC": 0.781,
+      "Brier": 0.091,
+      "flagged share": 0.252
+    },
+    {
+      "lead_h": 3,
+      "scope": "ORD (unseen)",
+      "model": "+ TAF / LAMP / METAR / Jev (full model)",
+      "base rate": 0.122,
+      "accuracy": 0.777,
+      "precision": 0.299,
+      "recall": 0.618,
+      "F1": 0.403,
+      "PR-AUC": 0.384,
+      "ROC-AUC": 0.785,
+      "Brier": 0.091,
+      "flagged share": 0.252
+    },
+    {
+      "lead_h": 6,
+      "scope": "ATL+DFW",
+      "model": "Always 'on time'",
+      "base rate": 0.127,
+      "accuracy": 0.873,
+      "precision": 0.0,
+      "recall": 0.0,
+      "F1": 0.0,
+      "PR-AUC": 0.127,
+      "ROC-AUC": 0.5,
+      "Brier": 0.127,
+      "flagged share": 0.0
+    },
+    {
+      "lead_h": 6,
+      "scope": "ATL+DFW",
+      "model": "Historical rate",
+      "base rate": 0.127,
+      "accuracy": 0.808,
+      "precision": 0.247,
+      "recall": 0.249,
+      "F1": 0.248,
+      "PR-AUC": 0.211,
+      "ROC-AUC": 0.647,
+      "Brier": 0.108,
+      "flagged share": 0.128
+    },
+    {
+      "lead_h": 6,
+      "scope": "ATL+DFW",
+      "model": "Schedule only",
+      "base rate": 0.127,
+      "accuracy": 0.763,
+      "precision": 0.251,
+      "recall": 0.436,
+      "F1": 0.319,
+      "PR-AUC": 0.268,
+      "ROC-AUC": 0.686,
+      "Brier": 0.104,
+      "flagged share": 0.221
+    },
+    {
+      "lead_h": 6,
+      "scope": "ATL+DFW",
+      "model": "+ ops (inbound aircraft, own departure, congestion)",
+      "base rate": 0.127,
+      "accuracy": 0.78,
+      "precision": 0.289,
+      "recall": 0.501,
+      "F1": 0.366,
+      "PR-AUC": 0.327,
+      "ROC-AUC": 0.731,
+      "Brier": 0.1,
+      "flagged share": 0.221
+    },
+    {
+      "lead_h": 6,
+      "scope": "ATL+DFW",
+      "model": "+ hourly weather file (\u2265 3 h old)",
+      "base rate": 0.127,
+      "accuracy": 0.783,
+      "precision": 0.296,
+      "recall": 0.513,
+      "F1": 0.375,
+      "PR-AUC": 0.334,
+      "ROC-AUC": 0.744,
+      "Brier": 0.099,
+      "flagged share": 0.221
+    },
+    {
+      "lead_h": 6,
+      "scope": "ATL+DFW",
+      "model": "+ TAF / LAMP / METAR / Jev (full model)",
+      "base rate": 0.127,
+      "accuracy": 0.79,
+      "precision": 0.313,
+      "recall": 0.543,
+      "F1": 0.397,
+      "PR-AUC": 0.351,
+      "ROC-AUC": 0.761,
+      "Brier": 0.097,
+      "flagged share": 0.221
+    },
+    {
+      "lead_h": 6,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "Always 'on time'",
+      "base rate": 0.132,
+      "accuracy": 0.868,
+      "precision": 0.0,
+      "recall": 0.0,
+      "F1": 0.0,
+      "PR-AUC": 0.132,
+      "ROC-AUC": 0.5,
+      "Brier": 0.132,
+      "flagged share": 0.0
+    },
+    {
+      "lead_h": 6,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "Historical rate",
+      "base rate": 0.132,
+      "accuracy": 0.805,
+      "precision": 0.263,
+      "recall": 0.267,
+      "F1": 0.265,
+      "PR-AUC": 0.222,
+      "ROC-AUC": 0.639,
+      "Brier": 0.111,
+      "flagged share": 0.134
+    },
+    {
+      "lead_h": 6,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "Schedule only",
+      "base rate": 0.132,
+      "accuracy": 0.753,
+      "precision": 0.252,
+      "recall": 0.447,
+      "F1": 0.322,
+      "PR-AUC": 0.292,
+      "ROC-AUC": 0.692,
+      "Brier": 0.106,
+      "flagged share": 0.233
+    },
+    {
+      "lead_h": 6,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "+ ops (inbound aircraft, own departure, congestion)",
+      "base rate": 0.132,
+      "accuracy": 0.768,
+      "precision": 0.285,
+      "recall": 0.505,
+      "F1": 0.365,
+      "PR-AUC": 0.339,
+      "ROC-AUC": 0.73,
+      "Brier": 0.102,
+      "flagged share": 0.233
+    },
+    {
+      "lead_h": 6,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "+ hourly weather file (\u2265 3 h old)",
+      "base rate": 0.132,
+      "accuracy": 0.771,
+      "precision": 0.291,
+      "recall": 0.516,
+      "F1": 0.372,
+      "PR-AUC": 0.344,
+      "ROC-AUC": 0.738,
+      "Brier": 0.102,
+      "flagged share": 0.233
+    },
+    {
+      "lead_h": 6,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "+ TAF / LAMP / METAR / Jev (full model)",
+      "base rate": 0.132,
+      "accuracy": 0.776,
+      "precision": 0.302,
+      "recall": 0.536,
+      "F1": 0.387,
+      "PR-AUC": 0.354,
+      "ROC-AUC": 0.752,
+      "Brier": 0.1,
+      "flagged share": 0.233
+    },
+    {
+      "lead_h": 6,
+      "scope": "ORD (unseen)",
+      "model": "Always 'on time'",
+      "base rate": 0.122,
+      "accuracy": 0.878,
+      "precision": 0.0,
+      "recall": 0.0,
+      "F1": 0.0,
+      "PR-AUC": 0.122,
+      "ROC-AUC": 0.5,
+      "Brier": 0.122,
+      "flagged share": 0.0
+    },
+    {
+      "lead_h": 6,
+      "scope": "ORD (unseen)",
+      "model": "Historical rate",
+      "base rate": 0.122,
+      "accuracy": 0.821,
+      "precision": 0.251,
+      "recall": 0.233,
+      "F1": 0.242,
+      "PR-AUC": 0.203,
+      "ROC-AUC": 0.643,
+      "Brier": 0.104,
+      "flagged share": 0.113
+    },
+    {
+      "lead_h": 6,
+      "scope": "ORD (unseen)",
+      "model": "Schedule only",
+      "base rate": 0.122,
+      "accuracy": 0.726,
+      "precision": 0.222,
+      "recall": 0.498,
+      "F1": 0.307,
+      "PR-AUC": 0.243,
+      "ROC-AUC": 0.678,
+      "Brier": 0.102,
+      "flagged share": 0.274
+    },
+    {
+      "lead_h": 6,
+      "scope": "ORD (unseen)",
+      "model": "+ ops (inbound aircraft, own departure, congestion)",
+      "base rate": 0.122,
+      "accuracy": 0.739,
+      "precision": 0.247,
+      "recall": 0.554,
+      "F1": 0.342,
+      "PR-AUC": 0.283,
+      "ROC-AUC": 0.717,
+      "Brier": 0.099,
+      "flagged share": 0.274
+    },
+    {
+      "lead_h": 6,
+      "scope": "ORD (unseen)",
+      "model": "+ hourly weather file (\u2265 3 h old)",
+      "base rate": 0.122,
+      "accuracy": 0.742,
+      "precision": 0.251,
+      "recall": 0.563,
+      "F1": 0.348,
+      "PR-AUC": 0.299,
+      "ROC-AUC": 0.728,
+      "Brier": 0.098,
+      "flagged share": 0.274
+    },
+    {
+      "lead_h": 6,
+      "scope": "ORD (unseen)",
+      "model": "+ TAF / LAMP / METAR / Jev (full model)",
+      "base rate": 0.122,
+      "accuracy": 0.744,
+      "precision": 0.256,
+      "recall": 0.574,
+      "F1": 0.354,
+      "PR-AUC": 0.311,
+      "ROC-AUC": 0.735,
+      "Brier": 0.098,
+      "flagged share": 0.274
+    },
+    {
+      "lead_h": 12,
+      "scope": "ATL+DFW",
+      "model": "Always 'on time'",
+      "base rate": 0.127,
+      "accuracy": 0.873,
+      "precision": 0.0,
+      "recall": 0.0,
+      "F1": 0.0,
+      "PR-AUC": 0.127,
+      "ROC-AUC": 0.5,
+      "Brier": 0.127,
+      "flagged share": 0.0
+    },
+    {
+      "lead_h": 12,
+      "scope": "ATL+DFW",
+      "model": "Historical rate",
+      "base rate": 0.127,
+      "accuracy": 0.808,
+      "precision": 0.247,
+      "recall": 0.249,
+      "F1": 0.248,
+      "PR-AUC": 0.211,
+      "ROC-AUC": 0.647,
+      "Brier": 0.108,
+      "flagged share": 0.128
+    },
+    {
+      "lead_h": 12,
+      "scope": "ATL+DFW",
+      "model": "Schedule only",
+      "base rate": 0.127,
+      "accuracy": 0.768,
+      "precision": 0.254,
+      "recall": 0.425,
+      "F1": 0.318,
+      "PR-AUC": 0.268,
+      "ROC-AUC": 0.686,
+      "Brier": 0.104,
+      "flagged share": 0.213
+    },
+    {
+      "lead_h": 12,
+      "scope": "ATL+DFW",
+      "model": "+ ops (inbound aircraft, own departure, congestion)",
+      "base rate": 0.127,
+      "accuracy": 0.774,
+      "precision": 0.268,
+      "recall": 0.449,
+      "F1": 0.336,
+      "PR-AUC": 0.285,
+      "ROC-AUC": 0.707,
+      "Brier": 0.103,
+      "flagged share": 0.213
+    },
+    {
+      "lead_h": 12,
+      "scope": "ATL+DFW",
+      "model": "+ hourly weather file (\u2265 3 h old)",
+      "base rate": 0.127,
+      "accuracy": 0.779,
+      "precision": 0.279,
+      "recall": 0.467,
+      "F1": 0.349,
+      "PR-AUC": 0.295,
+      "ROC-AUC": 0.722,
+      "Brier": 0.102,
+      "flagged share": 0.213
+    },
+    {
+      "lead_h": 12,
+      "scope": "ATL+DFW",
+      "model": "+ TAF / LAMP / METAR / Jev (full model)",
+      "base rate": 0.127,
+      "accuracy": 0.789,
+      "precision": 0.302,
+      "recall": 0.506,
+      "F1": 0.378,
+      "PR-AUC": 0.327,
+      "ROC-AUC": 0.748,
+      "Brier": 0.099,
+      "flagged share": 0.213
+    },
+    {
+      "lead_h": 12,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "Always 'on time'",
+      "base rate": 0.132,
+      "accuracy": 0.868,
+      "precision": 0.0,
+      "recall": 0.0,
+      "F1": 0.0,
+      "PR-AUC": 0.132,
+      "ROC-AUC": 0.5,
+      "Brier": 0.132,
+      "flagged share": 0.0
+    },
+    {
+      "lead_h": 12,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "Historical rate",
+      "base rate": 0.132,
+      "accuracy": 0.805,
+      "precision": 0.263,
+      "recall": 0.267,
+      "F1": 0.265,
+      "PR-AUC": 0.222,
+      "ROC-AUC": 0.639,
+      "Brier": 0.111,
+      "flagged share": 0.134
+    },
+    {
+      "lead_h": 12,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "Schedule only",
+      "base rate": 0.132,
+      "accuracy": 0.756,
+      "precision": 0.253,
+      "recall": 0.435,
+      "F1": 0.32,
+      "PR-AUC": 0.293,
+      "ROC-AUC": 0.692,
+      "Brier": 0.106,
+      "flagged share": 0.226
+    },
+    {
+      "lead_h": 12,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "+ ops (inbound aircraft, own departure, congestion)",
+      "base rate": 0.132,
+      "accuracy": 0.762,
+      "precision": 0.265,
+      "recall": 0.456,
+      "F1": 0.335,
+      "PR-AUC": 0.298,
+      "ROC-AUC": 0.705,
+      "Brier": 0.105,
+      "flagged share": 0.226
+    },
+    {
+      "lead_h": 12,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "+ hourly weather file (\u2265 3 h old)",
+      "base rate": 0.132,
+      "accuracy": 0.77,
+      "precision": 0.284,
+      "recall": 0.488,
+      "F1": 0.359,
+      "PR-AUC": 0.307,
+      "ROC-AUC": 0.717,
+      "Brier": 0.105,
+      "flagged share": 0.226
+    },
+    {
+      "lead_h": 12,
+      "scope": "ATL+DFW (organisers' sample rows)",
+      "model": "+ TAF / LAMP / METAR / Jev (full model)",
+      "base rate": 0.132,
+      "accuracy": 0.776,
+      "precision": 0.295,
+      "recall": 0.508,
+      "F1": 0.374,
+      "PR-AUC": 0.323,
+      "ROC-AUC": 0.736,
+      "Brier": 0.103,
+      "flagged share": 0.226
+    },
+    {
+      "lead_h": 12,
+      "scope": "ORD (unseen)",
+      "model": "Always 'on time'",
+      "base rate": 0.122,
+      "accuracy": 0.878,
+      "precision": 0.0,
+      "recall": 0.0,
+      "F1": 0.0,
+      "PR-AUC": 0.122,
+      "ROC-AUC": 0.5,
+      "Brier": 0.122,
+      "flagged share": 0.0
+    },
+    {
+      "lead_h": 12,
+      "scope": "ORD (unseen)",
+      "model": "Historical rate",
+      "base rate": 0.122,
+      "accuracy": 0.821,
+      "precision": 0.251,
+      "recall": 0.233,
+      "F1": 0.242,
+      "PR-AUC": 0.203,
+      "ROC-AUC": 0.643,
+      "Brier": 0.104,
+      "flagged share": 0.113
+    },
+    {
+      "lead_h": 12,
+      "scope": "ORD (unseen)",
+      "model": "Schedule only",
+      "base rate": 0.122,
+      "accuracy": 0.729,
+      "precision": 0.223,
+      "recall": 0.492,
+      "F1": 0.307,
+      "PR-AUC": 0.244,
+      "ROC-AUC": 0.678,
+      "Brier": 0.102,
+      "flagged share": 0.269
+    },
+    {
+      "lead_h": 12,
+      "scope": "ORD (unseen)",
+      "model": "+ ops (inbound aircraft, own departure, congestion)",
+      "base rate": 0.122,
+      "accuracy": 0.73,
+      "precision": 0.226,
+      "recall": 0.497,
+      "F1": 0.31,
+      "PR-AUC": 0.254,
+      "ROC-AUC": 0.685,
+      "Brier": 0.101,
+      "flagged share": 0.269
+    },
+    {
+      "lead_h": 12,
+      "scope": "ORD (unseen)",
+      "model": "+ hourly weather file (\u2265 3 h old)",
+      "base rate": 0.122,
+      "accuracy": 0.735,
+      "precision": 0.235,
+      "recall": 0.518,
+      "F1": 0.323,
+      "PR-AUC": 0.265,
+      "ROC-AUC": 0.701,
+      "Brier": 0.1,
+      "flagged share": 0.269
+    },
+    {
+      "lead_h": 12,
+      "scope": "ORD (unseen)",
+      "model": "+ TAF / LAMP / METAR / Jev (full model)",
+      "base rate": 0.122,
+      "accuracy": 0.739,
+      "precision": 0.242,
+      "recall": 0.534,
+      "F1": 0.333,
+      "PR-AUC": 0.279,
+      "ROC-AUC": 0.716,
+      "Brier": 0.1,
+      "flagged share": 0.269
+    }
+  ],
+  "main_threshold": 0.19,
+  "main_excluded_cancelled_diverted": 0.016216441942929045,
+  "main_by_airport_direction": [
+    {
+      "index": "KATL departures",
+      "base rate": 0.122,
+      "accuracy": 0.816,
+      "precision": 0.332,
+      "recall": 0.504,
+      "F1": 0.4,
+      "PR-AUC": 0.355,
+      "ROC-AUC": 0.775,
+      "Brier": 0.093,
+      "flagged share": 0.185
+    },
+    {
+      "index": "KATL arrivals",
+      "base rate": 0.103,
+      "accuracy": 0.832,
+      "precision": 0.287,
+      "recall": 0.427,
+      "F1": 0.343,
+      "PR-AUC": 0.272,
+      "ROC-AUC": 0.739,
+      "Brier": 0.084,
+      "flagged share": 0.153
+    },
+    {
+      "index": "KDFW departures",
+      "base rate": 0.147,
+      "accuracy": 0.743,
+      "precision": 0.321,
+      "recall": 0.667,
+      "F1": 0.433,
+      "PR-AUC": 0.405,
+      "ROC-AUC": 0.782,
+      "Brier": 0.106,
+      "flagged share": 0.306
+    },
+    {
+      "index": "KDFW arrivals",
+      "base rate": 0.137,
+      "accuracy": 0.771,
+      "precision": 0.306,
+      "recall": 0.532,
+      "F1": 0.388,
+      "PR-AUC": 0.35,
+      "ROC-AUC": 0.734,
+      "Brier": 0.105,
+      "flagged share": 0.238
+    }
+  ],
+  "main_by_weather": [
+    {
+      "index": "fair weather at scheduled hour",
+      "base rate": 0.119,
+      "accuracy": 0.794,
+      "precision": 0.296,
+      "recall": 0.529,
+      "F1": 0.38,
+      "PR-AUC": 0.33,
+      "ROC-AUC": 0.757,
+      "Brier": 0.093,
+      "flagged share": 0.213
+    },
+    {
+      "index": "IFR / thunderstorm at scheduled hour",
+      "base rate": 0.21,
+      "accuracy": 0.752,
+      "precision": 0.438,
+      "recall": 0.625,
+      "F1": 0.515,
+      "PR-AUC": 0.494,
+      "ROC-AUC": 0.775,
+      "Brier": 0.139,
+      "flagged share": 0.3
+    }
+  ],
+  "main_calibration_lead6": [
+    {
+      "predicted": 0.0359,
+      "observed": 0.03519999980926514,
+      "flights": 202686
+    },
+    {
+      "predicted": 0.0749,
+      "observed": 0.07129999995231628,
+      "flights": 195717
+    },
+    {
+      "predicted": 0.1375,
+      "observed": 0.13279999792575836,
+      "flights": 164298
+    },
+    {
+      "predicted": 0.2453,
+      "observed": 0.22830000519752502,
+      "flights": 68902
+    },
+    {
+      "predicted": 0.3398,
+      "observed": 0.31630000472068787,
+      "flights": 39521
+    },
+    {
+      "predicted": 0.4414,
+      "observed": 0.41690000891685486,
+      "flights": 21143
+    },
+    {
+      "predicted": 0.5458,
+      "observed": 0.5228999853134155,
+      "flights": 12973
+    },
+    {
+      "predicted": 0.6704,
+      "observed": 0.6248999834060669,
+      "flights": 4327
+    },
+    {
+      "predicted": 0.8417,
+      "observed": 0.7527999877929688,
+      "flights": 1246
+    }
+  ],
+  "main_importance_groups": {
+    "forecasts": 0.298,
+    "hourly_wx": 0.066,
+    "ops": 0.103,
+    "schedule": 0.533
+  },
+  "main_importance_top": {
+    "Other airport": 0.1826,
+    "LAMP lightning probability": 0.121,
+    "Airline": 0.0927,
+    "Scheduled turn time": 0.0817,
+    "Scheduled hour (local)": 0.0782,
+    "Month": 0.0356,
+    "Arrival (vs departure)": 0.0217,
+    "Avg departure delay (at issue)": 0.0215,
+    "Pressure (\u22653 h before)": 0.0209,
+    "Share of >45 min departures (at issue)": 0.0205,
+    "Avg arrival delay (at issue)": 0.0183,
+    "LAMP headwind": 0.0158,
+    "Temperature (hourly file, \u22653 h before)": 0.0131,
+    "TAF headwind on runway": 0.0128,
+    "Turn slack after inbound delay": 0.0117
+  },
+  "aar_rmse_test": [
+    {
+      "model": "Schedule",
+      "all hours": 12.23,
+      "busy hours": 14.61,
+      "weather-impacted hours": 18.05,
+      "busy & weather-impacted": 22.13
+    },
+    {
+      "model": "Climatology",
+      "all hours": 10.48,
+      "busy hours": 12.12,
+      "weather-impacted hours": 15.52,
+      "busy & weather-impacted": 18.69
+    },
+    {
+      "model": "Persistence",
+      "all hours": 15.87,
+      "busy hours": 19.48,
+      "weather-impacted hours": 19.68,
+      "busy & weather-impacted": 24.16
+    },
+    {
+      "model": "TAF rule",
+      "all hours": 11.82,
+      "busy hours": 13.94,
+      "weather-impacted hours": 17.08,
+      "busy & weather-impacted": 20.77
+    },
+    {
+      "model": "Schedule only",
+      "all hours": 9.24,
+      "busy hours": 11.14,
+      "weather-impacted hours": 15.16,
+      "busy & weather-impacted": 18.39
+    },
+    {
+      "model": "+ real-time ops",
+      "all hours": 8.97,
+      "busy hours": 10.9,
+      "weather-impacted hours": 14.66,
+      "busy & weather-impacted": 17.77
+    },
+    {
+      "model": "+ hourly weather (\u22653 h old)",
+      "all hours": 8.84,
+      "busy hours": 10.77,
+      "weather-impacted hours": 14.26,
+      "busy & weather-impacted": 17.22
+    },
+    {
+      "model": "+ METAR at issue",
+      "all hours": 8.82,
+      "busy hours": 10.74,
+      "weather-impacted hours": 14.2,
+      "busy & weather-impacted": 17.11
+    },
+    {
+      "model": "+ TAF",
+      "all hours": 8.49,
+      "busy hours": 10.33,
+      "weather-impacted hours": 13.21,
+      "busy & weather-impacted": 15.79
+    },
+    {
+      "model": "+ LAMP",
+      "all hours": 8.35,
+      "busy hours": 10.13,
+      "weather-impacted hours": 13.0,
+      "busy & weather-impacted": 15.46
+    },
+    {
+      "model": "+ Jev reads the TAF (full model)",
+      "all hours": 8.36,
+      "busy hours": 10.14,
+      "weather-impacted hours": 12.87,
+      "busy & weather-impacted": 15.3
+    }
+  ],
+  "aar_rows": {
+    "weather_impacted_test_hours": 959,
+    "test_hours": 10128
+  },
+  "aar_rmse_by_lead": [
+    {
+      "lead_h": 3,
+      "Schedule": 12.228,
+      "Climatology": 10.481,
+      "Persistence": 14.244,
+      "TAF rule": 11.812,
+      "Model": 8.299
+    },
+    {
+      "lead_h": 4,
+      "Schedule": 12.228,
+      "Climatology": 10.481,
+      "Persistence": 15.895,
+      "TAF rule": 11.812,
+      "Model": 8.286
+    },
+    {
+      "lead_h": 5,
+      "Schedule": 12.228,
+      "Climatology": 10.481,
+      "Persistence": 14.519,
+      "TAF rule": 11.81,
+      "Model": 8.289
+    },
+    {
+      "lead_h": 6,
+      "Schedule": 12.228,
+      "Climatology": 10.481,
+      "Persistence": 16.632,
+      "TAF rule": 11.814,
+      "Model": 8.321
+    },
+    {
+      "lead_h": 7,
+      "Schedule": 12.228,
+      "Climatology": 10.481,
+      "Persistence": 15.304,
+      "TAF rule": 11.818,
+      "Model": 8.338
+    },
+    {
+      "lead_h": 8,
+      "Schedule": 12.228,
+      "Climatology": 10.481,
+      "Persistence": 17.11,
+      "TAF rule": 11.828,
+      "Model": 8.351
+    },
+    {
+      "lead_h": 9,
+      "Schedule": 12.228,
+      "Climatology": 10.481,
+      "Persistence": 15.845,
+      "TAF rule": 11.83,
+      "Model": 8.395
+    },
+    {
+      "lead_h": 10,
+      "Schedule": 12.228,
+      "Climatology": 10.481,
+      "Persistence": 16.965,
+      "TAF rule": 11.827,
+      "Model": 8.398
+    },
+    {
+      "lead_h": 11,
+      "Schedule": 12.228,
+      "Climatology": 10.481,
+      "Persistence": 15.305,
+      "TAF rule": 11.83,
+      "Model": 8.454
+    },
+    {
+      "lead_h": 12,
+      "Schedule": 12.228,
+      "Climatology": 10.481,
+      "Persistence": 16.642,
+      "TAF rule": 11.829,
+      "Model": 8.469
+    }
+  ],
+  "aar_rmse_by_lead_impacted": [
+    {
+      "lead_h": 3,
+      "Schedule": 18.049,
+      "Persistence": 17.139,
+      "TAF rule": 17.024,
+      "Model": 12.647
+    },
+    {
+      "lead_h": 4,
+      "Schedule": 18.049,
+      "Persistence": 19.284,
+      "TAF rule": 17.024,
+      "Model": 12.565
+    },
+    {
+      "lead_h": 5,
+      "Schedule": 18.049,
+      "Persistence": 17.767,
+      "TAF rule": 17.017,
+      "Model": 12.606
+    },
+    {
+      "lead_h": 6,
+      "Schedule": 18.049,
+      "Persistence": 20.811,
+      "TAF rule": 17.053,
+      "Model": 12.7
+    },
+    {
+      "lead_h": 7,
+      "Schedule": 18.049,
+      "Persistence": 18.789,
+      "TAF rule": 17.07,
+      "Model": 12.799
+    },
+    {
+      "lead_h": 8,
+      "Schedule": 18.049,
+      "Persistence": 21.23,
+      "TAF rule": 17.103,
+      "Model": 12.866
+    },
+    {
+      "lead_h": 9,
+      "Schedule": 18.049,
+      "Persistence": 20.144,
+      "TAF rule": 17.144,
+      "Model": 12.936
+    },
+    {
+      "lead_h": 10,
+      "Schedule": 18.049,
+      "Persistence": 20.31,
+      "TAF rule": 17.132,
+      "Model": 13.008
+    },
+    {
+      "lead_h": 11,
+      "Schedule": 18.049,
+      "Persistence": 20.058,
+      "TAF rule": 17.142,
+      "Model": 13.206
+    },
+    {
+      "lead_h": 12,
+      "Schedule": 18.049,
+      "Persistence": 20.857,
+      "TAF rule": 17.129,
+      "Model": 13.305
+    }
+  ],
+  "aar_coverage": [
+    {
+      "index": "all test hours",
+      "coverage (target 80%)": 0.781,
+      "mean band width (arrivals/h)": 15.857
+    },
+    {
+      "index": "busy hours",
+      "coverage (target 80%)": 0.77,
+      "mean band width (arrivals/h)": 21.094
+    },
+    {
+      "index": "weather-impacted hours",
+      "coverage (target 80%)": 0.731,
+      "mean band width (arrivals/h)": 20.018
+    }
+  ],
+  "aar_detection": [
+    {
+      "lead_h": 3,
+      "method": "Model",
+      "POD (share of events forecast)": 0.6014,
+      "FAR (false alarm ratio)": 0.4126,
+      "CSI": 0.4228,
+      "events": 1430.0
+    },
+    {
+      "lead_h": 3,
+      "method": "TAF says TS or IFR",
+      "POD (share of events forecast)": 0.1811,
+      "FAR (false alarm ratio)": 0.6722,
+      "CSI": 0.1321,
+      "events": 1430.0
+    },
+    {
+      "lead_h": 3,
+      "method": "Persistence",
+      "POD (share of events forecast)": 0.2832,
+      "FAR (false alarm ratio)": 0.7052,
+      "CSI": 0.1688,
+      "events": 1430.0
+    },
+    {
+      "lead_h": 6,
+      "method": "Model",
+      "POD (share of events forecast)": 0.586,
+      "FAR (false alarm ratio)": 0.4144,
+      "CSI": 0.4142,
+      "events": 1430.0
+    },
+    {
+      "lead_h": 6,
+      "method": "TAF says TS or IFR",
+      "POD (share of events forecast)": 0.1965,
+      "FAR (false alarm ratio)": 0.6663,
+      "CSI": 0.1411,
+      "events": 1430.0
+    },
+    {
+      "lead_h": 6,
+      "method": "Persistence",
+      "POD (share of events forecast)": 0.1874,
+      "FAR (false alarm ratio)": 0.714,
+      "CSI": 0.1277,
+      "events": 1430.0
+    },
+    {
+      "lead_h": 9,
+      "method": "Model",
+      "POD (share of events forecast)": 0.5797,
+      "FAR (false alarm ratio)": 0.4275,
+      "CSI": 0.4046,
+      "events": 1430.0
+    },
+    {
+      "lead_h": 9,
+      "method": "TAF says TS or IFR",
+      "POD (share of events forecast)": 0.1909,
+      "FAR (false alarm ratio)": 0.68,
+      "CSI": 0.1358,
+      "events": 1430.0
+    },
+    {
+      "lead_h": 9,
+      "method": "Persistence",
+      "POD (share of events forecast)": 0.3601,
+      "FAR (false alarm ratio)": 0.6429,
+      "CSI": 0.2185,
+      "events": 1430.0
+    },
+    {
+      "lead_h": 12,
+      "method": "Model",
+      "POD (share of events forecast)": 0.5755,
+      "FAR (false alarm ratio)": 0.4293,
+      "CSI": 0.4017,
+      "events": 1430.0
+    },
+    {
+      "lead_h": 12,
+      "method": "TAF says TS or IFR",
+      "POD (share of events forecast)": 0.1881,
+      "FAR (false alarm ratio)": 0.6767,
+      "CSI": 0.135,
+      "events": 1430.0
+    },
+    {
+      "lead_h": 12,
+      "method": "Persistence",
+      "POD (share of events forecast)": 0.2888,
+      "FAR (false alarm ratio)": 0.6677,
+      "CSI": 0.1827,
+      "events": 1430.0
+    }
+  ],
+  "aar_generalisation": [
+    {
+      "test": "KORD (unseen, trained on ATL+DFW)",
+      "Model": 7.89,
+      "Schedule": 11.05,
+      "Climatology": 11.26,
+      "Persistence": 15.11,
+      "TAF rule": 10.66,
+      "Model (weather-impacted)": 10.65,
+      "TAF rule (weather-impacted)": 14.19
+    },
+    {
+      "test": "KATL (trained on KDFW only)",
+      "Model": 8.92,
+      "Schedule": 8.76,
+      "Climatology": 9.27,
+      "Persistence": 11.84,
+      "TAF rule": 8.46,
+      "Model (weather-impacted)": 11.29,
+      "TAF rule (weather-impacted)": 13.16
+    },
+    {
+      "test": "KDFW (trained on KATL only)",
+      "Model": 11.78,
+      "Schedule": 14.91,
+      "Climatology": 11.56,
+      "Persistence": 19.07,
+      "TAF rule": 14.42,
+      "Model (weather-impacted)": 17.8,
+      "TAF rule (weather-impacted)": 20.82
+    }
+  ],
+  "aar_importance_groups": {
+    "schedule": 0.959,
+    "lamp": 0.014,
+    "taf": 0.01,
+    "jev": 0.007,
+    "wx": 0.004,
+    "realtime": 0.003,
+    "metar": 0.002
+  },
+  "aar_importance_top": {
+    "Scheduled arrivals (this hour)": 0.6416,
+    "Scheduled arrivals (3 h window)": 0.2271,
+    "Local hour": 0.0317,
+    "Scheduled arrivals (hour before)": 0.0209,
+    "Scheduled arrivals (hour after)": 0.0192,
+    "Scheduled departures": 0.0155,
+    "LAMP lightning probability": 0.0037,
+    "TAF issues/amendments in last 6 h": 0.0029,
+    "Month": 0.0026,
+    "LAMP precip probability": 0.0024,
+    "LAMP convection probability": 0.0023,
+    "LAMP headwind": 0.0017,
+    "Jev: worst severity in TAF": 0.0014,
+    "Jev: P(no hazard)": 0.0014,
+    "Jev: P(convective hazard)": 0.0013
+  },
+  "clf_strict_dep45": [
+    {
+      "lead_h": 3,
+      "ROC-AUC": 0.802,
+      "PR-AUC": 0.423,
+      "Brier": 0.096,
+      "precision@10% alerts": 0.475,
+      "recall@10% alerts": 0.384,
+      "base rate": 0.134
+    },
+    {
+      "lead_h": 6,
+      "ROC-AUC": 0.78,
+      "PR-AUC": 0.377,
+      "Brier": 0.101,
+      "precision@10% alerts": 0.444,
+      "recall@10% alerts": 0.335,
+      "base rate": 0.134
+    },
+    {
+      "lead_h": 12,
+      "ROC-AUC": 0.769,
+      "PR-AUC": 0.357,
+      "Brier": 0.102,
+      "precision@10% alerts": 0.408,
+      "recall@10% alerts": 0.343,
+      "base rate": 0.134
+    }
+  ],
+  "clf_test": [
+    {
+      "lead_h": 3,
+      "airports": "ATL+DFW",
+      "model": "Climatology",
+      "ROC-AUC": 0.645,
+      "PR-AUC": 0.249,
+      "Brier": 0.129,
+      "precision@10% alerts": 0.301,
+      "recall@10% alerts": 0.195
+    },
+    {
+      "lead_h": 3,
+      "airports": "ATL+DFW",
+      "model": "Schedule only",
+      "ROC-AUC": 0.719,
+      "PR-AUC": 0.362,
+      "Brier": 0.12,
+      "precision@10% alerts": 0.434,
+      "recall@10% alerts": 0.275
+    },
+    {
+      "lead_h": 3,
+      "airports": "ATL+DFW",
+      "model": "+ ops & aircraft rotation",
+      "ROC-AUC": 0.799,
+      "PR-AUC": 0.493,
+      "Brier": 0.106,
+      "precision@10% alerts": 0.567,
+      "recall@10% alerts": 0.359
+    },
+    {
+      "lead_h": 3,
+      "airports": "ATL+DFW",
+      "model": "+ weather (full model)",
+      "ROC-AUC": 0.813,
+      "PR-AUC": 0.497,
+      "Brier": 0.103,
+      "precision@10% alerts": 0.544,
+      "recall@10% alerts": 0.418
+    },
+    {
+      "lead_h": 3,
+      "airports": "ORD (unseen)",
+      "model": "Climatology",
+      "ROC-AUC": 0.634,
+      "PR-AUC": 0.22,
+      "Brier": 0.115,
+      "precision@10% alerts": 0.278,
+      "recall@10% alerts": 0.203
+    },
+    {
+      "lead_h": 3,
+      "airports": "ORD (unseen)",
+      "model": "Schedule only",
+      "ROC-AUC": 0.706,
+      "PR-AUC": 0.294,
+      "Brier": 0.111,
+      "precision@10% alerts": 0.347,
+      "recall@10% alerts": 0.252
+    },
+    {
+      "lead_h": 3,
+      "airports": "ORD (unseen)",
+      "model": "+ ops & aircraft rotation",
+      "ROC-AUC": 0.783,
+      "PR-AUC": 0.408,
+      "Brier": 0.101,
+      "precision@10% alerts": 0.48,
+      "recall@10% alerts": 0.348
+    },
+    {
+      "lead_h": 3,
+      "airports": "ORD (unseen)",
+      "model": "+ weather (full model)",
+      "ROC-AUC": 0.786,
+      "PR-AUC": 0.395,
+      "Brier": 0.107,
+      "precision@10% alerts": 0.461,
+      "recall@10% alerts": 0.341
+    },
+    {
+      "lead_h": 6,
+      "airports": "ATL+DFW",
+      "model": "Climatology",
+      "ROC-AUC": 0.645,
+      "PR-AUC": 0.249,
+      "Brier": 0.129,
+      "precision@10% alerts": 0.301,
+      "recall@10% alerts": 0.195
+    },
+    {
+      "lead_h": 6,
+      "airports": "ATL+DFW",
+      "model": "Schedule only",
+      "ROC-AUC": 0.719,
+      "PR-AUC": 0.362,
+      "Brier": 0.12,
+      "precision@10% alerts": 0.434,
+      "recall@10% alerts": 0.275
+    },
+    {
+      "lead_h": 6,
+      "airports": "ATL+DFW",
+      "model": "+ ops & aircraft rotation",
+      "ROC-AUC": 0.763,
+      "PR-AUC": 0.425,
+      "Brier": 0.113,
+      "precision@10% alerts": 0.502,
+      "recall@10% alerts": 0.318
+    },
+    {
+      "lead_h": 6,
+      "airports": "ATL+DFW",
+      "model": "+ weather (full model)",
+      "ROC-AUC": 0.793,
+      "PR-AUC": 0.453,
+      "Brier": 0.108,
+      "precision@10% alerts": 0.517,
+      "recall@10% alerts": 0.371
+    },
+    {
+      "lead_h": 6,
+      "airports": "ORD (unseen)",
+      "model": "Climatology",
+      "ROC-AUC": 0.634,
+      "PR-AUC": 0.22,
+      "Brier": 0.115,
+      "precision@10% alerts": 0.278,
+      "recall@10% alerts": 0.203
+    },
+    {
+      "lead_h": 6,
+      "airports": "ORD (unseen)",
+      "model": "Schedule only",
+      "ROC-AUC": 0.706,
+      "PR-AUC": 0.294,
+      "Brier": 0.111,
+      "precision@10% alerts": 0.347,
+      "recall@10% alerts": 0.252
+    },
+    {
+      "lead_h": 6,
+      "airports": "ORD (unseen)",
+      "model": "+ ops & aircraft rotation",
+      "ROC-AUC": 0.735,
+      "PR-AUC": 0.329,
+      "Brier": 0.109,
+      "precision@10% alerts": 0.391,
+      "recall@10% alerts": 0.283
+    },
+    {
+      "lead_h": 6,
+      "airports": "ORD (unseen)",
+      "model": "+ weather (full model)",
+      "ROC-AUC": 0.753,
+      "PR-AUC": 0.34,
+      "Brier": 0.115,
+      "precision@10% alerts": 0.401,
+      "recall@10% alerts": 0.294
+    },
+    {
+      "lead_h": 12,
+      "airports": "ATL+DFW",
+      "model": "Climatology",
+      "ROC-AUC": 0.645,
+      "PR-AUC": 0.249,
+      "Brier": 0.129,
+      "precision@10% alerts": 0.301,
+      "recall@10% alerts": 0.195
+    },
+    {
+      "lead_h": 12,
+      "airports": "ATL+DFW",
+      "model": "Schedule only",
+      "ROC-AUC": 0.718,
+      "PR-AUC": 0.362,
+      "Brier": 0.12,
+      "precision@10% alerts": 0.434,
+      "recall@10% alerts": 0.275
+    },
+    {
+      "lead_h": 12,
+      "airports": "ATL+DFW",
+      "model": "+ ops & aircraft rotation",
+      "ROC-AUC": 0.74,
+      "PR-AUC": 0.383,
+      "Brier": 0.117,
+      "precision@10% alerts": 0.46,
+      "recall@10% alerts": 0.291
+    },
+    {
+      "lead_h": 12,
+      "airports": "ATL+DFW",
+      "model": "+ weather (full model)",
+      "ROC-AUC": 0.781,
+      "PR-AUC": 0.425,
+      "Brier": 0.111,
+      "precision@10% alerts": 0.499,
+      "recall@10% alerts": 0.329
+    },
+    {
+      "lead_h": 12,
+      "airports": "ORD (unseen)",
+      "model": "Climatology",
+      "ROC-AUC": 0.634,
+      "PR-AUC": 0.22,
+      "Brier": 0.115,
+      "precision@10% alerts": 0.278,
+      "recall@10% alerts": 0.203
+    },
+    {
+      "lead_h": 12,
+      "airports": "ORD (unseen)",
+      "model": "Schedule only",
+      "ROC-AUC": 0.706,
+      "PR-AUC": 0.294,
+      "Brier": 0.111,
+      "precision@10% alerts": 0.347,
+      "recall@10% alerts": 0.251
+    },
+    {
+      "lead_h": 12,
+      "airports": "ORD (unseen)",
+      "model": "+ ops & aircraft rotation",
+      "ROC-AUC": 0.712,
+      "PR-AUC": 0.3,
+      "Brier": 0.111,
+      "precision@10% alerts": 0.374,
+      "recall@10% alerts": 0.271
+    },
+    {
+      "lead_h": 12,
+      "airports": "ORD (unseen)",
+      "model": "+ weather (full model)",
+      "ROC-AUC": 0.735,
+      "PR-AUC": 0.308,
+      "Brier": 0.117,
+      "precision@10% alerts": 0.379,
+      "recall@10% alerts": 0.277
+    }
+  ],
+  "clf_base_rate_test": 0.1577650093937087,
+  "clf_calibration_lead6": [
+    {
+      "predicted": 0.0354,
+      "observed": 0.0331,
+      "flights": 92332
+    },
+    {
+      "predicted": 0.0703,
+      "observed": 0.0662,
+      "flights": 81167
+    },
+    {
+      "predicted": 0.1355,
+      "observed": 0.1283,
+      "flights": 83271
+    },
+    {
+      "predicted": 0.2387,
+      "observed": 0.228,
+      "flights": 45969
+    },
+    {
+      "predicted": 0.3402,
+      "observed": 0.3146,
+      "flights": 21049
+    },
+    {
+      "predicted": 0.4366,
+      "observed": 0.4126,
+      "flights": 19002
+    },
+    {
+      "predicted": 0.5532,
+      "observed": 0.5243,
+      "flights": 9418
+    },
+    {
+      "predicted": 0.68,
+      "observed": 0.6446,
+      "flights": 11557
+    },
+    {
+      "predicted": 0.8712,
+      "observed": 0.8478,
+      "flights": 1373
+    }
+  ],
+  "clf_by_weather_lead6": [
+    {
+      "index": "normal weather at departure hour",
+      "ROC-AUC": 0.7831,
+      "PR-AUC": 0.4109,
+      "Brier": 0.1041,
+      "precision@10% alerts": 0.4808,
+      "recall@10% alerts": 0.3459
+    },
+    {
+      "index": "IFR/thunderstorm at departure hour",
+      "ROC-AUC": 0.8281,
+      "PR-AUC": 0.6717,
+      "Brier": 0.1503,
+      "precision@10% alerts": 0.7988,
+      "recall@10% alerts": 0.2853
+    }
+  ],
+  "clf_importance_groups": {
+    "ops": 0.092,
+    "schedule": 0.563,
+    "weather": 0.345
+  },
+  "clf_importance_top": {
+    "Scheduled turn time": 0.1552,
+    "Destination": 0.1533,
+    "Airline": 0.0922,
+    "Departure hour (local)": 0.0845,
+    "LAMP lightning probability": 0.0817,
+    "Month": 0.0358,
+    "LAMP convection probability": 0.0292,
+    "Share of >45 min departures (at issue)": 0.0178,
+    "Avg departure delay (at issue)": 0.0171,
+    "TAF headwind on runway": 0.0158,
+    "Temperature (hourly file, \u22653 h before)": 0.0155,
+    "Pressure (\u22653 h before)": 0.0153,
+    "Avg arrival delay (at issue)": 0.015,
+    "Turn slack after inbound delay": 0.0145,
+    "Jev: P(convective hazard)": 0.0129
+  },
+  "failure_causes_top100": {
+    "unexplained": 40,
+    "thunderstorm: forecast, impact under-estimated": 21,
+    "winter precipitation / icing: forecast, impact under-estimated": 11,
+    "recovery after earlier weather (backlog, crews out of position)": 9,
+    "thunderstorm: not forecast by TAF or LAMP": 7,
+    "no local weather: system-wide disruption (en-route weather, IT, staffing)": 6,
+    "low ceiling / visibility": 4,
+    "winter precipitation / icing: not forecast": 2
+  },
+  "false_alarm_share_busy_lead6": 0.009070682868389525,
+  "storm_lead_time": [
+    {
+      "index": "Model alert (forecast < 85% of schedule)",
+      "episodes with a capacity drop": 50,
+      "warned \u2265 3 h ahead": 0.94,
+      "warned \u2265 6 h ahead": 0.9,
+      "median warning (h)": 12.0
+    },
+    {
+      "index": "TAF says thunderstorm or IFR",
+      "episodes with a capacity drop": 50,
+      "warned \u2265 3 h ahead": 0.82,
+      "warned \u2265 6 h ahead": 0.78,
+      "median warning (h)": 12.0
+    }
+  ],
+  "impact": [
+    {
+      "airport": "KATL",
+      "lead_h": 3,
+      "scenario": "reactive",
+      "ground_min": 0.0,
+      "airborne_min": 271020.0,
+      "airborne_saved_min": 0.0,
+      "fuel_saved_t": 0.0,
+      "co2_saved_t": 0.0,
+      "total_delay_change_min": 0.0
+    },
+    {
+      "airport": "KATL",
+      "lead_h": 3,
+      "scenario": "model",
+      "ground_min": 130456.3,
+      "airborne_min": 247116.4,
+      "airborne_saved_min": 23903.6,
+      "fuel_saved_t": 841.4,
+      "co2_saved_t": 2658.8,
+      "total_delay_change_min": 106552.7
+    },
+    {
+      "airport": "KATL",
+      "lead_h": 3,
+      "scenario": "model_confident",
+      "ground_min": 10420.0,
+      "airborne_min": 265524.3,
+      "airborne_saved_min": 5495.7,
+      "fuel_saved_t": 193.4,
+      "co2_saved_t": 611.3,
+      "total_delay_change_min": 4924.3
+    },
+    {
+      "airport": "KATL",
+      "lead_h": 3,
+      "scenario": "taf_rule",
+      "ground_min": 423330.5,
+      "airborne_min": 311934.1,
+      "airborne_saved_min": -40914.1,
+      "fuel_saved_t": -1440.2,
+      "co2_saved_t": -4551.0,
+      "total_delay_change_min": 464244.6
+    },
+    {
+      "airport": "KATL",
+      "lead_h": 3,
+      "scenario": "perfect",
+      "ground_min": 188880.0,
+      "airborne_min": 82140.0,
+      "airborne_saved_min": 188880.0,
+      "fuel_saved_t": 6648.6,
+      "co2_saved_t": 21009.5,
+      "total_delay_change_min": 0.0
+    },
+    {
+      "airport": "KATL",
+      "lead_h": 6,
+      "scenario": "reactive",
+      "ground_min": 0.0,
+      "airborne_min": 271020.0,
+      "airborne_saved_min": 0.0,
+      "fuel_saved_t": 0.0,
+      "co2_saved_t": 0.0,
+      "total_delay_change_min": 0.0
+    },
+    {
+      "airport": "KATL",
+      "lead_h": 6,
+      "scenario": "model",
+      "ground_min": 132161.6,
+      "airborne_min": 247145.0,
+      "airborne_saved_min": 23875.0,
+      "fuel_saved_t": 840.4,
+      "co2_saved_t": 2655.7,
+      "total_delay_change_min": 108286.6
+    },
+    {
+      "airport": "KATL",
+      "lead_h": 6,
+      "scenario": "model_confident",
+      "ground_min": 10300.8,
+      "airborne_min": 265943.7,
+      "airborne_saved_min": 5076.3,
+      "fuel_saved_t": 178.7,
+      "co2_saved_t": 564.6,
+      "total_delay_change_min": 5224.5
+    },
+    {
+      "airport": "KATL",
+      "lead_h": 6,
+      "scenario": "taf_rule",
+      "ground_min": 452463.2,
+      "airborne_min": 325247.9,
+      "airborne_saved_min": -54227.9,
+      "fuel_saved_t": -1908.8,
+      "co2_saved_t": -6031.9,
+      "total_delay_change_min": 506691.1
+    },
+    {
+      "airport": "KATL",
+      "lead_h": 6,
+      "scenario": "perfect",
+      "ground_min": 188880.0,
+      "airborne_min": 82140.0,
+      "airborne_saved_min": 188880.0,
+      "fuel_saved_t": 6648.6,
+      "co2_saved_t": 21009.5,
+      "total_delay_change_min": 0.0
+    },
+    {
+      "airport": "KDFW",
+      "lead_h": 3,
+      "scenario": "reactive",
+      "ground_min": 0.0,
+      "airborne_min": 660960.0,
+      "airborne_saved_min": 0.0,
+      "fuel_saved_t": 0.0,
+      "co2_saved_t": 0.0,
+      "total_delay_change_min": 0.0
+    },
+    {
+      "airport": "KDFW",
+      "lead_h": 3,
+      "scenario": "model",
+      "ground_min": 345850.7,
+      "airborne_min": 532366.1,
+      "airborne_saved_min": 128593.9,
+      "fuel_saved_t": 4526.5,
+      "co2_saved_t": 14303.8,
+      "total_delay_change_min": 217256.8
+    },
+    {
+      "airport": "KDFW",
+      "lead_h": 3,
+      "scenario": "model_confident",
+      "ground_min": 42036.2,
+      "airborne_min": 626208.2,
+      "airborne_saved_min": 34751.8,
+      "fuel_saved_t": 1223.3,
+      "co2_saved_t": 3865.5,
+      "total_delay_change_min": 7284.4
+    },
+    {
+      "airport": "KDFW",
+      "lead_h": 3,
+      "scenario": "taf_rule",
+      "ground_min": 273047.2,
+      "airborne_min": 725923.6,
+      "airborne_saved_min": -64963.6,
+      "fuel_saved_t": -2286.7,
+      "co2_saved_t": -7226.0,
+      "total_delay_change_min": 338010.8
+    },
+    {
+      "airport": "KDFW",
+      "lead_h": 3,
+      "scenario": "perfect",
+      "ground_min": 443340.0,
+      "airborne_min": 217620.0,
+      "airborne_saved_min": 443340.0,
+      "fuel_saved_t": 15605.6,
+      "co2_saved_t": 49313.6,
+      "total_delay_change_min": 0.0
+    },
+    {
+      "airport": "KDFW",
+      "lead_h": 6,
+      "scenario": "reactive",
+      "ground_min": 0.0,
+      "airborne_min": 660960.0,
+      "airborne_saved_min": 0.0,
+      "fuel_saved_t": 0.0,
+      "co2_saved_t": 0.0,
+      "total_delay_change_min": 0.0
+    },
+    {
+      "airport": "KDFW",
+      "lead_h": 6,
+      "scenario": "model",
+      "ground_min": 317455.6,
+      "airborne_min": 545691.1,
+      "airborne_saved_min": 115268.9,
+      "fuel_saved_t": 4057.5,
+      "co2_saved_t": 12821.6,
+      "total_delay_change_min": 202186.7
+    },
+    {
+      "airport": "KDFW",
+      "lead_h": 6,
+      "scenario": "model_confident",
+      "ground_min": 39569.8,
+      "airborne_min": 631014.8,
+      "airborne_saved_min": 29945.2,
+      "fuel_saved_t": 1054.1,
+      "co2_saved_t": 3330.9,
+      "total_delay_change_min": 9624.6
+    },
+    {
+      "airport": "KDFW",
+      "lead_h": 6,
+      "scenario": "taf_rule",
+      "ground_min": 306547.0,
+      "airborne_min": 725433.3,
+      "airborne_saved_min": -64473.3,
+      "fuel_saved_t": -2269.5,
+      "co2_saved_t": -7171.5,
+      "total_delay_change_min": 371020.3
+    },
+    {
+      "airport": "KDFW",
+      "lead_h": 6,
+      "scenario": "perfect",
+      "ground_min": 443340.0,
+      "airborne_min": 217620.0,
+      "airborne_saved_min": 443340.0,
+      "fuel_saved_t": 15605.6,
+      "co2_saved_t": 49313.6,
+      "total_delay_change_min": 0.0
+    }
+  ],
+  "impact_assumptions": {
+    "fuel_hold_kg_min": 35.2,
+    "co2_per_kg_fuel": 3.16,
+    "block_cost_usd_min": 100.76,
+    "period": "2025-01-01 to 2025-07-30"
+  }
+}

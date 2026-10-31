@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+logs/
+# downloaded raw public data (re-created by scripts/download_data.py)
+data/external/
+.env
+.taste-skill/
