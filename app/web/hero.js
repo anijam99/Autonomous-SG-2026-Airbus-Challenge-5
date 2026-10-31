@@ -206,9 +206,15 @@ const Hero = (() => {
     const R = st.runs, el = document.getElementById("h-runs");
     if (el) {
       const r = R.react, f = R.fc, mx = Math.max(r?.hold || 1, f?.hold || 1);
-      const row = (lab, x, col) => x ? `<div>${lab}: <b style="color:${col}">${Math.round(x.hold)} min</b> airborne holding · ${(x.hold * FUEL_KG_MIN / 1000).toFixed(1)} t fuel</div>
-        <div class="bar" style="width:${Math.max(2, x.hold / mx * 100)}%;background:${col}"></div>` : `<div style="color:var(--muted)">${lab}: running…</div><div class="bar" style="width:2%;background:#26385a"></div>`;
-      el.innerHTML = `<div style="margin-bottom:6px;color:#a39d96">Same storm, two strategies</div>` + row("Reactive (today)", r, AMBER) + row("With forecast", f, GREEN);
+      const prog = Math.min(100, st.t / CYCLE * 100);
+      const row = (lab, x, col, mode) => {
+        if (x) return `<div>${lab}: <b style="color:${col}">${Math.round(x.hold)} min</b> airborne holding · ${(x.hold * FUEL_KG_MIN / 1000).toFixed(1)} t fuel</div>
+          <div class="bar" style="width:${Math.max(2, x.hold / mx * 100)}%;background:${col}"></div>`;
+        const active = st.mode === mode, p = active ? prog : 0;
+        return `<div style="display:flex;justify-content:space-between;color:var(--muted)"><span>${lab}: ${active ? "simulating…" : "waiting to simulate"}</span><span>${active ? Math.floor(p) + "%" : ""}</span></div>
+          <div class="sim-track"><div class="sim-fill" style="width:${p}%;background:${col}"></div></div>`;
+      };
+      el.innerHTML = `<div style="margin-bottom:6px;color:#a39d96">Same storm, two strategies</div>` + row("Reactive (today)", r, AMBER, "react") + row("With forecast", f, GREEN, "fc");
     }
   }
 

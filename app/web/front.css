@@ -203,3 +203,5 @@ body.front .brand svg { display: none; }
   .fp-hero .note { margin-top: 28px; }
   .fp-hero-copy { padding-bottom: 24px; }
 }
+.fp-scope .runs .sim-track { height: 8px; margin: 3px 0 7px; background: #1a2233; overflow: hidden; }
+.fp-scope .runs .sim-fill { height: 100%; opacity: .85; }
