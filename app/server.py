@@ -12,7 +12,16 @@ import threading
 from datetime import datetime, timezone
 from pathlib import Path
 
-import lightgbm as lgb
+import ctypes
+import platform
+
+# LightGBM needs the OpenMP runtime; serverless hosts (Vercel) don't ship it, so load the bundled copy first.
+if platform.system() == "Linux":
+    try:
+        ctypes.CDLL("libgomp.so.1")
+    except OSError:
+        ctypes.CDLL(str(Path(__file__).resolve().parents[1] / "vendor" / "libgomp.so.1"), mode=ctypes.RTLD_GLOBAL)
+import lightgbm as lgb  # noqa: E402
 import numpy as np
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Request
