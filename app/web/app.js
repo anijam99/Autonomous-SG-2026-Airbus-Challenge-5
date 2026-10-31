@@ -1,4 +1,4 @@
-/* Runway Capacity Outlook: single-page front end. All numbers come from the API (models + fixed rules). */
+/* Gatehold: single-page front end. All numbers come from the API (models + fixed rules). */
 const S = { airport: "KATL", date: "2025-06-27", hour: 12, reveal: true, stale: false, route: "overview", sel: null, meta: null, filter: "all", lead: 6, impLead: 3, policy: "model_confident" };
 const $ = s => document.querySelector(s);
 const pct = d3.format(".0%"), f1 = d3.format(".1f"), f2 = d3.format(".2f"), f3 = d3.format(".3f"), comma = d3.format(",.0f");

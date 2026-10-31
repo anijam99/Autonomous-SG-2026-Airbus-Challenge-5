@@ -1,4 +1,5 @@
-# Runway Capacity Outlook
+# Gatehold
+*Hold them at the gate, not in the sky.*
 ### Airbus Challenge 5 · Autonomous SG 2026 · *Predictive Airport Capacity & Risk Model*
 
 **Forecast every ATL/DFW flight's risk of a delay over 45 minutes, 3–12 hours ahead, plus the airport's hourly arrival capacity, so the traffic manager can hold flights on the ground instead of in airborne holding.**
@@ -142,8 +143,8 @@ MIT (see `LICENSE`).
 ## Deploy (Docker / Coolify)
 The image serves the web app only; models and the data it reads are prebuilt in `data/` and committed.
 ```bash
-docker build -t runway-outlook .
-docker run -p 8600:8600 runway-outlook          # → http://localhost:8600
+docker build -t gatehold .
+docker run -p 8600:8600 gatehold                # → http://localhost:8600
 ```
 **Coolify:** New resource → your Git repo → Build pack **Dockerfile** → port **8600** (health check: `/api/meta`). Optional env var `TYPESAFE_API_KEY` enables live Jev briefs; everything else works without it. `HOST`/`PORT` can be overridden.
 

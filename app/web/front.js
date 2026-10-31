@@ -111,7 +111,7 @@ async function overview(v) {
         <li>Going live needs real-time FAA feeds and a trial alongside today's process.</li></ul></div>
     </section>
 
-    <footer class="fp-foot"><span>Runway capacity outlook</span>
+    <footer class="fp-foot"><span>Gatehold</span>
       <nav><a href="#/departures?ap=KATL&d=2025-06-27&h=14&r=1">Flights at risk</a><a href="#/try">Try the model</a><a href="${demo}">Capacity outlook</a><a href="#/performance">Performance</a><a href="#/data">Data</a></nav>
       <span class="r">Airbus Challenge 5 · 2026</span></footer>
     <p class="fp-credits">Pictures: <a href="https://commons.wikimedia.org/wiki/File:Atlanta_Hartsfield-Jackson_Airport_Concourse_A_aerial_(49054916886).jpg">Atlanta Concourse A aerial</a> by formulanone; <a href="https://commons.wikimedia.org/wiki/File:Thunderstorm_over_Gatwick_Airport_from_the_air_-_geograph.org.uk_-_2482228.jpg">Thunderstorm over Gatwick Airport from the air</a> by Thomas Nugent; <a href="https://commons.wikimedia.org/wiki/File:Airbus_A319_(British_Airways)_G-EUPA_at_Hamburg_(19303962928).jpg">Airbus A319 G-EUPA at Hamburg</a> by G B_NZ. All <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a>, via Wikimedia Commons.</p>

@@ -1,4 +1,4 @@
-# Runway Capacity Outlook: web app image (FastAPI + D3). Models and data are prebuilt in data/.
+# Gatehold: web app image (FastAPI + D3). Models and data are prebuilt in data/.
 FROM python:3.14-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 HOST=0.0.0.0 PORT=8600

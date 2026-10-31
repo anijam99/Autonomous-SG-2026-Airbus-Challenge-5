@@ -1,4 +1,4 @@
-"""Runway Capacity Outlook: API + web front end.
+"""Gatehold: API + web front end.
 
     .venv/bin/python app/server.py            # then open http://localhost:8600
 
@@ -64,7 +64,7 @@ THR = CONF["main_threshold"]
 JEV_CACHE: dict = {}
 JEV_LOCK = threading.Lock()
 
-app = FastAPI(title="Runway Capacity Outlook")
+app = FastAPI(title="Gatehold")
 
 
 def clean(obj):
