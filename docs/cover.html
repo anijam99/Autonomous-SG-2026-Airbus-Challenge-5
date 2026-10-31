@@ -13,6 +13,7 @@ h1{font:700 168px/0.85 "League Spartan",sans-serif;letter-spacing:-.05em;margin:
 .s .d{font-size:16px;color:#a39d96;margin-top:8px;max-width:210px;line-height:1.35}
 .s .v span{color:#c9a45a}
 .r{position:absolute;right:40px;top:50px;width:780px;height:800px}
+.lab{font:500 14px 'JetBrains Mono',monospace}.sm{font:500 12px 'JetBrains Mono',monospace;letter-spacing:.04em}
 .foot{position:absolute;right:96px;bottom:40px;font:500 13px "JetBrains Mono",monospace;letter-spacing:.14em;color:#6f6a64;text-transform:uppercase}
 </style></head><body>
 <div class="l">
@@ -22,38 +23,57 @@ h1{font:700 168px/0.85 "League Spartan",sans-serif;letter-spacing:-.05em;margin:
   <div class="p">Every ATL and DFW flight's risk of a delay over 45 minutes, so traffic managers hold aircraft at the gate instead of in the sky.</div>
 </div>
 <div class="stats">
-  <div class="s"><div class="v">54<span>%</span></div><div class="d">of of 45-min delays flagged 6 h aheadgt;45-min delays flagged 6 h ahead (history: 25%)</div></div>
+  <div class="s"><div class="v">54<span>%</span></div><div class="d">of &gt;45-min delays flagged 6 h ahead (history: 25%)</div></div>
   <div class="s"><div class="v">94<span>%</span></div><div class="d">of NOAA-logged storms flagged 3+ h ahead</div></div>
   <div class="s"><div class="v">26<span>%</span></div><div class="d">lower arrival-rate error than the TAF rule in storms</div></div>
 </div>
-<svg class="r" viewBox="0 0 780 800">
-  <defs>
-    <radialGradient id="st" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ff5a3c" stop-opacity=".85"/><stop offset=".35" stop-color="#ffb84d" stop-opacity=".5"/><stop offset=".7" stop-color="#3dff8b" stop-opacity=".18"/><stop offset="1" stop-color="#3dff8b" stop-opacity="0"/></radialGradient>
-    <linearGradient id="sw" x1="0" x2="1"><stop offset="0" stop-color="#3ee0ff" stop-opacity="0"/><stop offset="1" stop-color="#3ee0ff" stop-opacity=".28"/></linearGradient>
-    <symbol id="pl" viewBox="-10 -9 20 18"><path d="M9 0Q8-1.3 5-1.3L1.5-1.3-3-8.5-5-8.5-2.2-1.3-6.5-1.1-8.6-4-9.8-4-8.8 0-9.8 4-8.6 4-6.5 1.1-2.2 1.3-5 8.5-3 8.5 1.5 1.3 5 1.3Q8 1.3 9 0Z"/></symbol>
-  </defs>
-  <g transform="translate(400 400)">
-    <circle r="360" fill="none" stroke="#3ee0ff" stroke-opacity=".25"/>
-    <circle r="240" fill="none" stroke="#3ee0ff" stroke-opacity=".18" stroke-dasharray="2 6"/>
-    <circle r="120" fill="none" stroke="#3ee0ff" stroke-opacity=".18" stroke-dasharray="2 6"/>
-    <g font-family="JetBrains Mono" font-size="14" fill="#3ee0ff" fill-opacity=".7" text-anchor="middle">
-      <text y="-372">00</text><text x="372" y="-8">09</text><text y="388">18</text><text x="-386" y="5">27</text></g>
-    <path d="M0 0 L330 140 A360 360 0 0 0 360 0 Z" fill="url(#sw)"/>
-    <ellipse cx="-150" cy="-170" rx="150" ry="115" fill="url(#st)"/>
-    <text x="-150" y="-300" font-family="JetBrains Mono" font-size="15" fill="#ff8a65" text-anchor="middle">CB · TSRA</text>
-    <g transform="rotate(-10)"><rect x="-48" y="-5" width="96" height="10" rx="2" fill="#2a3550"/>
-      <line x1="-40" y1="0" x2="40" y2="0" stroke="#eef3fb" stroke-dasharray="7 6" stroke-width="2"/></g>
-    <line x1="-60" y1="10" x2="-260" y2="46" stroke="#ff4fd8" stroke-dasharray="6 6" stroke-width="2"/>
-    <g fill="#ff4fd8"><use href="#pl" x="-130" y="13" width="22" height="20"/><use href="#pl" x="-185" y="23" width="22" height="20"/><use href="#pl" x="-240" y="33" width="22" height="20"/></g>
-    <text x="0" y="36" font-family="JetBrains Mono" font-size="15" fill="#fff" text-anchor="middle">KATL · RWY 08</text>
-    <text x="0" y="58" font-family="JetBrains Mono" font-size="14" fill="#3dff8b" text-anchor="middle">GDP 51/h · HELD AT GATE</text>
-    <g fill="#eef3fb"><use href="#pl" x="200" y="-250" width="24" height="22" transform="rotate(130 212 -239)"/><use href="#pl" x="250" y="-205" width="24" height="22" transform="rotate(130 262 -194)"/>
-      <use href="#pl" x="-330" y="150" width="24" height="22" transform="rotate(-20 -318 161)"/><use href="#pl" x="-290" y="200" width="24" height="22" transform="rotate(-20 -278 211)"/>
-      <use href="#pl" x="120" y="270" width="24" height="22" transform="rotate(-120 132 281)"/><use href="#pl" x="60" y="300" width="24" height="22" transform="rotate(-120 72 311)"/></g>
-    <g fill="none" stroke="#ffb84d" stroke-opacity=".7"><ellipse cx="250" cy="90" rx="40" ry="18"/></g>
-    <g fill="#ffb84d"><use href="#pl" x="215" y="72" width="22" height="20"/><use href="#pl" x="262" y="96" width="22" height="20" transform="rotate(180 273 106)"/></g>
-    <text x="250" y="140" font-family="JetBrains Mono" font-size="13" fill="#ffb84d" text-anchor="middle">2 HOLDING (was 14)</text>
-  </g>
-</svg>
+<svg class="r" id="radar" viewBox="0 0 780 800"></svg>
+<script>
+(() => {
+  const R = 350, cx = 390, cy = 400, NS = "http://www.w3.org/2000/svg", svg = document.getElementById("radar");
+  const pol = (brg, r) => [cx + r * Math.sin(brg * Math.PI / 180), cy - r * Math.cos(brg * Math.PI / 180)];   // bearing from north, clockwise
+  let h = `<defs>
+    <radialGradient id="st"><stop offset="0" stop-color="#ff4b2b" stop-opacity=".9"/><stop offset=".3" stop-color="#ffb84d" stop-opacity=".6"/><stop offset=".62" stop-color="#3dff8b" stop-opacity=".22"/><stop offset="1" stop-color="#3dff8b" stop-opacity="0"/></radialGradient>
+    <radialGradient id="glow"><stop offset="0" stop-color="#3ee0ff" stop-opacity=".06"/><stop offset="1" stop-color="#3ee0ff" stop-opacity="0"/></radialGradient>
+    <symbol id="pl" viewBox="-10 -9 20 18" overflow="visible"><path d="M9 0Q8-1.3 5-1.3L1.5-1.3-3-8.5-5-8.5-2.2-1.3-6.5-1.1-8.6-4-9.8-4-8.8 0-9.8 4-8.6 4-6.5 1.1-2.2 1.3-5 8.5-3 8.5 1.5 1.3 5 1.3Q8 1.3 9 0Z"/></symbol></defs>
+    <circle cx="${cx}" cy="${cy}" r="${R}" fill="url(#glow)"/>`;
+  // radar sweep: a fading 40° wedge trailing the beam at bearing 118°
+  const beam = 158;
+  for (let i = 0; i < 40; i++) { const a0 = beam - i - 1, a1 = beam - i, [x0, y0] = pol(a0, R), [x1, y1] = pol(a1, R);
+    h += `<path d="M${cx},${cy} L${x0},${y0} A${R},${R} 0 0 1 ${x1},${y1} Z" fill="#3ee0ff" fill-opacity="${(0.22 * (1 - i / 40)).toFixed(3)}"/>`; }
+  { const [x, y] = pol(beam, R); h += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#3ee0ff" stroke-opacity=".7" stroke-width="1.5"/>`; }
+  // storm cell to the north-west, in the arrival path
+  { const [x, y] = pol(318, 205); h += `<ellipse cx="${x}" cy="${y}" rx="125" ry="95" transform="rotate(-25 ${x} ${y})" fill="url(#st)"/>
+     <text x="${x}" y="${y - 118}" class="lab" fill="#ff8a65" text-anchor="middle">CB · TSRA</text>`; }
+  // range rings 10/20/30 NM and the compass rose
+  [R / 3, 2 * R / 3].forEach(r => h += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#3ee0ff" stroke-opacity=".16" stroke-dasharray="2 6"/>`);
+  h += `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#3ee0ff" stroke-opacity=".35"/>`;
+  for (let d = 0; d < 360; d += 5) { const big = d % 30 === 0, [x0, y0] = pol(d, R), [x1, y1] = pol(d, R - (big ? 14 : d % 10 ? 4 : 8));
+    h += `<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="#3ee0ff" stroke-opacity="${big ? .7 : .35}"/>`;
+    if (big) { const [tx, ty] = pol(d, R + 20); h += `<text x="${tx}" y="${ty + 5}" class="lab" fill="#3ee0ff" fill-opacity=".8" text-anchor="middle">${String(d / 10).padStart(2, "0")}</text>`; } }
+  [[R / 3, "10"], [2 * R / 3, "20"], [R, "30 NM"]].forEach(([r, t]) => { const [x, y] = pol(90, r); h += `<text x="${x - 6}" y="${y - 6}" class="sm" fill="#3dff8b" text-anchor="end">${t}</text>`; });
+  // runway 08/26 at the centre, extended centreline and final approach from the west (aircraft land heading 080)
+  const RW = 80, [ra, rb] = [pol(RW + 180, 26), pol(RW, 26)];
+  const [fa, fb] = [pol(RW + 180, 30), pol(RW + 180, 165)];
+  h += `<line x1="${fa[0]}" y1="${fa[1]}" x2="${fb[0]}" y2="${fb[1]}" stroke="#ff4fd8" stroke-width="2" stroke-dasharray="7 6"/>
+    <line x1="${ra[0]}" y1="${ra[1]}" x2="${rb[0]}" y2="${rb[1]}" stroke="#2a3550" stroke-width="10" stroke-linecap="round"/>
+    <line x1="${ra[0]}" y1="${ra[1]}" x2="${rb[0]}" y2="${rb[1]}" stroke="#eef3fb" stroke-width="1.6" stroke-dasharray="5 4"/>`;
+  const plane = (x, y, hdg, col, sz = 22) => `<use href="#pl" x="${x - sz / 2}" y="${y - sz / 2}" width="${sz}" height="${sz}" fill="${col}" transform="rotate(${hdg - 90} ${x} ${y})"/>`;
+  [60, 105, 150].forEach(r => { const [x, y] = pol(RW + 180, r); h += plane(x, y, RW, "#ff4fd8"); });   // on final, nose to the runway
+  // feeder streams from three arrival fixes, every aircraft pointed at the field; fixes marked with triangles
+  [[25, [310, 160]], [140, [310, 250]], [205, [300, 235, 175]]].forEach(([brg, rs]) => {
+    const [fx, fy] = pol(brg, R - 20);
+    h += `<path d="M${fx},${fy - 7} L${fx + 6},${fy + 5} L${fx - 6},${fy + 5} Z" fill="none" stroke="#3dff8b"/>`;
+    rs.forEach(r => { const [x, y] = pol(brg, r); h += plane(x, y, (brg + 180) % 360, "#eef3fb", 20); }); });
+  // holding pattern (racetrack) north-east of the field: 2 aircraft, down from 14 without the forecast
+  { const [hx, hy] = pol(52, 250), L = 44, W = 18, rot = 52;
+    h += `<g transform="rotate(${rot - 90} ${hx} ${hy})"><path d="M${hx - L},${hy - W} H${hx + L} A${W},${W} 0 0 1 ${hx + L},${hy + W} H${hx - L} A${W},${W} 0 0 1 ${hx - L},${hy - W} Z" fill="none" stroke="#ffb84d" stroke-opacity=".8" stroke-dasharray="4 4"/>
+      ${plane(hx + 10, hy - W, 90, "#ffb84d", 20)}${plane(hx - 14, hy + W, 270, "#ffb84d", 20)}</g>
+      <text x="${hx}" y="${hy + 72}" class="sm" fill="#ffb84d" text-anchor="middle">2 HOLDING (14 WITHOUT FORECAST)</text>`; }
+  h += `<text x="${cx}" y="${cy - 58}" class="lab" fill="#fff" text-anchor="middle">KATL · RWY 08</text>
+        <text x="${cx}" y="${cy - 38}" class="sm" fill="#3dff8b" text-anchor="middle">GDP 51/h · FLIGHTS HELD AT GATE</text>`;
+  svg.innerHTML = h;
+})();
+</script>
 <div class="foot">LightGBM · leak-free weather ≥ 3 h old · the traffic manager decides</div>
 </body></html>
