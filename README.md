@@ -104,7 +104,7 @@ flowchart LR
 * **The human decides.** Accept/Dismiss is logged; a downloadable briefing records every timestamp.
 * **Declines when it should.** Hours are withheld when the TAF is missing or older than 6 h (demo switch: "Simulate TAF outage"). Dates and airports outside validation are refused.
 
-## Assumptions (also on the demo's front page)
+## Assumptions
 * Main label: `DEP_DELAY > 45` (departures from the hub) / `ARR_DELAY > 45` (arrivals into the hub). Cancelled and diverted flights (1.6%) have no delay value, so they are excluded from this label and scored separately.
 * Weather: organisers' hourly file for ATL/DFW, the same Meteostat source fetched by script for other airports, plus public METAR/TAF/LAMP issued before the forecast time.
 * Training uses the full BTS on-time data (fetched by script; the provided file is a ~1% sample). Results are also reported on the organisers' sample rows.

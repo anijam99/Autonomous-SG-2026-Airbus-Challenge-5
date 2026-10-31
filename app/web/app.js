@@ -273,9 +273,9 @@ async function departures(v) {
   v.innerHTML = `
   <div class="grid">
     <div class="card span-4"><div class="eyebrow">Main target · ${S.airport} · flights 3–12 h ahead</div>
-      <h1>${d.flagged} of ${d.n} flights</h1><p>flagged as likely to be delayed <b>more than 45 minutes</b> (departures: DEP_DELAY, arrivals: ARR_DELAY). Expected total ${comma(d.expected)}; the 2025 average is ${pct(d.base_rate)} of flights.</p>
-      ${S.reveal ? `<p>What happened: <b>${d.actual}</b> of ${d.labelled} operated flights were &gt; 45 min late. In this window the flags caught <b>${d.tp}</b>: precision ${prec == null ? "–" : pct(prec)}, recall ${rec == null ? "–" : pct(rec)}.</p>` : ""}
-      <p class="note">Flag threshold ${f2(thr)}, chosen on 2024 validation data (best F1) and frozen. Only weather observed ≥ 3 h before each scheduled time is used. Rates per flight, never raw minutes.</p></div>
+      <h1>${d.flagged} of ${d.n} flights</h1><p>flagged as likely to run <b>more than 45 minutes</b> late. On an average 2025 day it is ${pct(d.base_rate)}.</p>
+      ${S.reveal ? `<p>What happened: <b>${d.actual}</b> flights ran over 45 minutes late, and the flags caught <b>${rec == null ? "–" : pct(rec)}</b> of them.</p>` : ""}
+      <p class="note">Flag line ${pct(thr)}, set on 2024 data and frozen.</p></div>
     <div class="card span-8"><div class="eyebrow">Share of flights &gt; 45 min late, by scheduled hour</div><div id="riskhr"></div></div>
     <div class="card span-12"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div class="eyebrow">Flights board · sorted by risk · hover "why" for the reasons</div>
       <div style="display:flex;gap:8px"><div class="segs" id="dirf">${["all", "DEP", "ARR"].map(k => `<button class="${(S.dir || "all") === k ? "on" : ""}" data-k="${k}">${{ all: "All", DEP: "Departures", ARR: "Arrivals" }[k]}</button>`).join("")}</div>
@@ -328,11 +328,12 @@ async function perfPage(v) {
     </div>
     <div class="segs" id="mlead">${[3, 6, 12].map(k => `<button class="${k === 6 ? "on" : ""}" data-k="${k}">${k} h ahead</button>`).join("")}</div>
     <div id="mtab" style="margin-top:8px"></div>
-    <p class="note">"Always on time" scores high accuracy and zero recall, which is why accuracy alone is misleading. The ablation models are compared at the same alert rate as the full model. The <b>organisers' sample rows</b> are the flights in Flight_Data_With_Weather_Final.csv during the test period. Cancelled and diverted flights (${pct(M.main_excluded_cancelled_diverted || 0)}) have no delay value and are excluded from this label (assumption).</p>
+    <p class="note">"Always on time" scores high accuracy and zero recall, which is why accuracy alone is misleading. The ablation models are compared at the same alert rate as the full model. On Chicago O'Hare, never used in training, the full model scores PR-AUC ${f3(mrow("ORD (unseen)", full)["PR-AUC"] || 0)} against ${f3(mrow("ORD (unseen)", "Historical rate")["PR-AUC"] || 0)} for its own history. Cancelled and diverted flights (${pct(M.main_excluded_cancelled_diverted || 0)}) have no delay value and are excluded from this label (assumption).</p>
     <div class="grid" style="margin-top:6px"><div class="span-6"><h3>By airport and direction (6 h)</h3>${table(M.main_by_airport_direction || [], [{ key: "index", label: "Group" }, { key: "base rate", label: "Base rate", fmt: pct }, { key: "precision", label: "Precision", fmt: pct }, { key: "recall", label: "Recall", fmt: pct }, { key: "F1", label: "F1", fmt: f2 }, { key: "PR-AUC", label: "PR-AUC", fmt: f2 }])}
       <h3>Fair vs bad weather at the scheduled hour</h3>${table(M.main_by_weather || [], [{ key: "index", label: "Conditions" }, { key: "base rate", label: "Base rate", fmt: pct }, { key: "precision", label: "Precision", fmt: pct }, { key: "recall", label: "Recall", fmt: pct }, { key: "PR-AUC", label: "PR-AUC", fmt: f2 }])}</div>
       <div class="span-6"><h3>What the classifier relies on</h3><div id="mimp"></div><h3>Calibration (6 h)</h3><div id="mcal"></div></div></div>
   </div>
+  <div class="grid" style="margin-bottom:16px">${fitChecks(S.meta.metrics_headline)}</div>
   <div class="eyebrow" style="margin:6px 0 10px"><span class="tagm est">Bonus</span> Arrival acceptance rate (AAR), measured from full BTS data</div>
   <div class="statgrid">
     <div class="stat"><div class="v">${f1(model["all hours"])}</div><div class="l">arrivals/h RMSE, all 2025 test hours</div><div class="c">best baseline ${f1(Math.min(...rm.slice(0, 4).map(r => r["all hours"])))} · schedule ${f1(rm[0]["all hours"])}</div></div>
@@ -369,7 +370,7 @@ async function perfPage(v) {
       <div class="ticker" style="font-size:12.5px">${esc(W.taf)}${W.tempo ? " + " + esc(W.tempo) : ""}</div>
       <p class="note">How the user would know: the band and the "convective / winter" recommendation flag lower confidence whenever any signal exists. Rare high-impact events (ice storms, ground stops) are under-represented in training, so their impact is under-estimated. Fix: more seasons of data, and radar or HRRR inputs for storms that appear without warning.</p></div>
   </div>`;
-  const mdraw = k => $("#mtab").innerHTML = table(MT.filter(r => r.lead_h === k), [{ key: "scope", label: "Scored on" }, { key: "model", label: "Model" },
+  const mdraw = k => $("#mtab").innerHTML = table(MT.filter(r => r.lead_h === k && r.scope === "ATL+DFW"), [{ key: "model", label: "Model (each row adds inputs)" },
     { key: "base rate", label: "Base rate", fmt: pct }, { key: "accuracy", label: "Accuracy", fmt: pct }, { key: "precision", label: "Precision", fmt: pct },
     { key: "recall", label: "Recall", fmt: pct }, { key: "F1", label: "F1", fmt: f2 }, { key: "PR-AUC", label: "PR-AUC", fmt: f3 }, { key: "ROC-AUC", label: "ROC-AUC", fmt: f3 }]);
   mdraw(6);

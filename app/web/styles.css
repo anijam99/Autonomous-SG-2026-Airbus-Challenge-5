@@ -383,3 +383,9 @@ body:not(.front) .stat .v { font-size: 28px; } body:not(.front) .kpi .v { font-s
 body:not(.front) .stat .v { font-size: 24px; }
 .lvl { white-space: nowrap; }
 #view > .grid > .card.span-5:first-child { align-self: start; }
+
+/* performance: over-fitting strip chart */
+.sc-svg { width: 100%; height: auto; margin: 8px 0; }
+.sc-lab { font: 400 14px var(--sans); fill: var(--ink-2); }
+.sc-v { font: 600 14px var(--sans); fill: var(--ink); font-variant-numeric: tabular-nums; }
+.sc-t { font: 400 12px var(--sans); fill: var(--muted); }
