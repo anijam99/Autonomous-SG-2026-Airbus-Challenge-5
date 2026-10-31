@@ -7,6 +7,7 @@ observed or issued at or before T.
 from __future__ import annotations
 
 import ast
+import json
 from pathlib import Path
 
 import airportsdata
@@ -39,6 +40,56 @@ _AP_IATA = airportsdata.load("IATA")
 # Palm Beach (PBI) was renamed DJT in 2026 airport data; BTS 2023-2025 still uses PBI
 if "PBI" not in _AP_IATA and "DJT" in _AP_IATA:
     _AP_IATA["PBI"] = {**_AP_IATA["DJT"], "iata": "PBI"}
+
+
+# ------------------------------------------------------------------ light runtime (no pyarrow / scikit-learn, e.g. Vercel)
+try:
+    import pyarrow  # noqa: F401
+    HAVE_PYARROW = True
+except ImportError:
+    HAVE_PYARROW = False
+
+
+def read_table(path, columns=None) -> pd.DataFrame:
+    """Parquet when pyarrow is installed; otherwise the gzip pickle written by scripts/export_slim_runtime.py."""
+    path = Path(path)
+    pk = path.with_name(path.name + ".pkl.gz")
+    if not HAVE_PYARROW and pk.exists():
+        d = pd.read_pickle(pk)
+        return d[columns] if columns else d
+    return pd.read_parquet(path, columns=columns)
+
+
+class Calibrator:
+    """Isotonic calibration as a lookup table (same output as sklearn IsotonicRegression with out_of_bounds='clip')."""
+    def __init__(self, path_without_suffix: Path):
+        j = Path(str(path_without_suffix) + ".json")
+        if j.exists():
+            t = json.loads(j.read_text())
+            self.x, self.y, self._sk = np.asarray(t["x"]), np.asarray(t["y"]), None
+        else:
+            import joblib
+            self._sk = joblib.load(str(path_without_suffix) + ".joblib")
+
+    def predict(self, p):
+        return self._sk.predict(p) if self._sk is not None else np.interp(np.asarray(p, dtype=float), self.x, self.y)
+
+
+def average_precision(y, p) -> float:
+    """Same definition as sklearn.metrics.average_precision_score (step-wise, ties grouped)."""
+    y, p = np.asarray(y).astype(int), np.asarray(p, dtype=float)
+    o = np.argsort(-p, kind="mergesort"); y, p = y[o], p[o]
+    last = np.r_[np.where(np.diff(p))[0], len(p) - 1]
+    tp = np.cumsum(y)[last]; fp = (last + 1) - tp
+    prec, rec = tp / (tp + fp), tp / max(y.sum(), 1)
+    return float(np.sum(np.diff(np.r_[0, rec]) * prec))
+
+
+def roc_auc(y, p) -> float:
+    y = np.asarray(y).astype(int)
+    r = pd.Series(np.asarray(p, dtype=float)).rank().values
+    n1 = y.sum(); n0 = len(y) - n1
+    return float((r[y == 1].sum() - n1 * (n1 + 1) / 2) / max(n1 * n0, 1))
 
 
 # ------------------------------------------------------------------ airports
@@ -153,7 +204,7 @@ def load_hourly_weather(icao: str, heading: float) -> pd.DataFrame:
     w = pd.read_csv(CHALLENGE_WX)
     w = w[w.airport == code]
     if w.empty:
-        w = pd.read_parquet(EXT / "meteostat" / f"meteostat_{icao}.parquet")
+        w = read_table(EXT / "meteostat" / f"meteostat_{icao}.parquet")
     w = w.copy()
     w["hour"] = pd.to_datetime(w.time_utc).dt.tz_localize("UTC")
     w = w.drop_duplicates("hour").set_index("hour").sort_index()

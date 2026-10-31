@@ -51,6 +51,7 @@ def main():
     step("Build modelling notebook", [PY, "scripts/build_model_notebook.py"], env)
     step("Train and evaluate models", run_nb("02_model_capacity_and_delay_risk.ipynb"), env)
     step("Build feature store for scoring your own data", [PY, "scripts/export_feature_store.py"], env)
+    step("Light runtime copies for the web app (Vercel)", [PY, "scripts/export_slim_runtime.py"], env)
     print(f"\nDone. Start the app with:  C5_TRAIN='{' '.join(a.train)}' C5_HOLDOUT='{' '.join(a.holdout)}' {PY} app/server.py")
 
 

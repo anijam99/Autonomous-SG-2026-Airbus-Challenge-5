@@ -10,7 +10,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import joblib
 import lightgbm as lgb
 import numpy as np
 import pandas as pd
@@ -24,10 +23,10 @@ OPTIONAL_NUM = ["DEP_DELAY", "ARR_DELAY", "TAXI_OUT", "TAXI_IN", "DISTANCE", "CR
 class Scorer:
     def __init__(self, model_dir: Path = C.MODEL_DIR):
         self.model = lgb.Booster(model_file=str(model_dir / "delay_main.txt"))
-        self.iso = joblib.load(model_dir / "delay_main_calibrator.joblib")
+        self.iso = C.Calibrator(model_dir / "delay_main_calibrator")
         self.feats = self.model.feature_name()
         self.thr = json.loads((model_dir / "conformal.json").read_text())["main_threshold"]
-        fs = pd.read_parquet(model_dir / "feature_store.parquet")
+        fs = C.read_table(model_dir / "feature_store.parquet")
         self.fs = fs
         self.airports = sorted(fs.airport.unique())
         self.hmin, self.hmax = fs.hour.min(), fs.hour.max()
@@ -112,8 +111,8 @@ class Scorer:
         bdir = C.bts_dir(C.TRAIN_AIRPORTS + C.HOLDOUT_AIRPORTS)
         for m in months:
             f = bdir / f"bts_{m}.parquet"
-            if f.exists():
-                ctx.append(pd.read_parquet(f))
+            if (C.HAVE_PYARROW and f.exists()) or f.with_name(f.name + ".pkl.gz").exists():
+                ctx.append(C.read_table(f))
         if ctx:
             c = pd.concat(ctx, ignore_index=True)
             c = C.prepare_flights(c[c.CRS_ELAPSED_TIME.notna()])
@@ -156,7 +155,7 @@ class Scorer:
             summ["in_sample_rows"] = seen
         lab = out.actual_gt45.notna() & out.in_test_period
         if lab.sum() >= 10 and out.loc[lab, "actual_gt45"].nunique() == 2:
-            from sklearn.metrics import average_precision_score, roc_auc_score
+            average_precision_score, roc_auc_score = C.average_precision, C.roc_auc
             y, p, a = out.loc[lab, "actual_gt45"].astype(int), out.loc[lab, "p_delay_gt45"], out.loc[lab, "flag_gt45"]
             tp = int((a & (y == 1)).sum())
             summ.update({"labelled": int(lab.sum()), "base_rate": float(y.mean()), "precision": tp / max(int(a.sum()), 1),

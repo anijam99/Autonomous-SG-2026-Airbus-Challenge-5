@@ -12,7 +12,6 @@ import threading
 from datetime import datetime, timezone
 from pathlib import Path
 
-import joblib
 import lightgbm as lgb
 import numpy as np
 import pandas as pd
@@ -28,27 +27,29 @@ import jev  # noqa: E402
 
 MODEL, PROC, WEB = ROOT / "data" / "model", ROOT / "data" / "processed", Path(__file__).parent / "web"
 LOG = ROOT / "logs" / "decisions.jsonl"
+if not __import__("os").access(ROOT, __import__("os").W_OK):   # read-only file system (serverless): keep the log in /tmp
+    LOG = Path("/tmp/gatehold/decisions.jsonl")
 
 # ------------------------------------------------------------------ load once
-AAR = pd.read_parquet(MODEL / "aar_test.parquet")
+AAR = C.read_table(MODEL / "aar_test.parquet")
 METRICS = json.loads((MODEL / "metrics.json").read_text())
 CONF = json.loads((MODEL / "conformal.json").read_text())
-DEPS = pd.read_parquet(MODEL / "test_departures.parquet")
+DEPS = C.read_table(MODEL / "test_departures.parquet")
 for c in ["carrier", "dest"]:
     DEPS[c] = DEPS[c].astype("category")
-HIST = pd.read_parquet(MODEL / "hourly_history.parquet")
-POOL = pd.read_parquet(MODEL / "analog_pool.parquet")
-FAIL = pd.read_parquet(MODEL / "failure_cases.parquet")
-STORMS = pd.read_parquet(MODEL / "storm_lead_times.parquet")
+HIST = C.read_table(MODEL / "hourly_history.parquet")
+POOL = C.read_table(MODEL / "analog_pool.parquet")
+FAIL = C.read_table(MODEL / "failure_cases.parquet")
+STORMS = C.read_table(MODEL / "storm_lead_times.parquet")
 REPORT = json.loads((PROC / "cleaning_report.json").read_text())
 DICT = pd.read_csv(PROC / "data_dictionary.csv")
 AAR_MODEL = lgb.Booster(model_file=str(MODEL / "aar_p50.txt"))
 CLF = lgb.Booster(model_file=str(MODEL / "delay_clf.txt"))
-ISO = joblib.load(MODEL / "delay_calibrator.joblib")
+ISO = C.Calibrator(MODEL / "delay_calibrator")
 MAIN = lgb.Booster(model_file=str(MODEL / "delay_main.txt"))
-MISO = joblib.load(MODEL / "delay_main_calibrator.joblib")
+MISO = C.Calibrator(MODEL / "delay_main_calibrator")
 MAIN_FEATS = MAIN.feature_name()
-HUBF = pd.read_parquet(MODEL / "test_hub_flights.parquet")
+HUBF = C.read_table(MODEL / "test_hub_flights.parquet")
 for c in ["carrier", "other"]:
     HUBF[c] = HUBF[c].astype("category")
 AAR_FEATS = AAR_MODEL.feature_name()
@@ -388,11 +389,9 @@ def trends(airport: str):
 
 @app.get("/api/data_story")
 def data_story():
-    raw = pd.read_csv(ROOT / "Flight_Data_With_Weather_Final.csv", usecols=["ORIGIN", "CRS_DEP_TIME", "temp_ORIGIN"])
-    raw = raw[raw.ORIGIN.isin(["LAX", "ATL", "DFW"])]
-    dv = raw.assign(h=raw.CRS_DEP_TIME // 100).groupby(["ORIGIN", "h"]).temp_ORIGIN.mean().unstack(0).round(2)
+    dv = pd.read_csv(PROC / "provided_diurnal.csv").pivot(index="h", columns="ORIGIN", values="temp_ORIGIN")   # from export_slim_runtime.py
     full = HIST[HIST.airport == "KATL"].set_index("hour").dep_sched.resample("D").sum()
-    prov = pd.read_parquet(PROC / "flights_clean_hubs.parquet", columns=["ORIGIN", "FL_DATE"])
+    prov = C.read_table(PROC / "flights_clean_hubs.parquet", columns=["ORIGIN", "FL_DATE"])
     prov = prov[prov.ORIGIN == "ATL"].groupby("FL_DATE").size()
     drops = pd.Series(REPORT["dropped_columns"]).rename_axis("column").reset_index(name="reason")
     dgroups = [{"reason": k, "columns": list(v)} for k, v in drops.groupby("reason").column]
@@ -434,10 +433,7 @@ async def predict(req: Request, lead: int = 6):
 def sample_csv(n: int = 300, seed: int = 7):
     """A sample of the organisers' own file (ATL/DFW, 2025 test period) to try the pipeline with."""
     from fastapi.responses import PlainTextResponse
-    raw = pd.read_csv(ROOT / "Flight_Data_With_Weather_Final.csv", low_memory=False,
-                      usecols=["FL_DATE", "OP_UNIQUE_CARRIER", "OP_CARRIER_FL_NUM", "TAIL_NUM", "ORIGIN", "DEST", "CRS_DEP_TIME",
-                               "CRS_ARR_TIME", "CRS_ELAPSED_TIME", "DISTANCE", "DEP_DELAY", "ARR_DELAY", "CANCELLED", "DIVERTED"])
-    raw = raw[(raw.ORIGIN.isin(["ATL", "DFW"]) | raw.DEST.isin(["ATL", "DFW"])) & (raw.FL_DATE >= "2025-01-02") & (raw.FL_DATE <= "2025-07-29")]
+    raw = pd.read_csv(PROC / "provided_test_rows.csv.gz", low_memory=False)   # organisers' rows, ATL/DFW, test period
     return PlainTextResponse(raw.sample(min(n, len(raw)), random_state=seed).to_csv(index=False), media_type="text/csv")
 
 
@@ -460,7 +456,7 @@ def predict_one(origin: str, dest: str, date: str, dep_time: str, carrier: str =
 async def decision(req: Request):
     d = await req.json()
     d["logged_utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    LOG.parent.mkdir(exist_ok=True)
+    LOG.parent.mkdir(parents=True, exist_ok=True)
     with LOG.open("a") as f:
         f.write(json.dumps(d) + "\n")
     return {"ok": True}

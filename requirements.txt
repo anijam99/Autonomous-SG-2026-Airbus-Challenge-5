@@ -1,13 +1,7 @@
+# Web app runtime only (Vercel / Docker). Training pipeline and notebooks: requirements-pipeline.txt
 pandas==3.1.0
 numpy==2.5.4
-pyarrow==26.0.0
 airportsdata==20261030
 lightgbm==4.7.0
-scikit-learn==1.9.1
-matplotlib==3.11.2
-joblib
-jupyter
-nbformat
 fastapi==0.162.0
 uvicorn==0.54.0
-xgboost

@@ -17,7 +17,7 @@
 
 ## Run it
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+python3 -m venv .venv && .venv/bin/pip install -r requirements-pipeline.txt   # full pipeline; the app alone needs requirements.txt
 echo "TYPESAFE_API_KEY=..." > .env                       # optional, enables Jev (git-ignored)
 # needs the organisers' Flight_Data_With_Weather_Final.csv in the repo root (included)
 .venv/bin/python scripts/run_pipeline.py                 # download → clean → Jev → train/evaluate (~20 min first run)
@@ -140,7 +140,10 @@ flowchart LR
 ## Licence
 MIT (see `LICENSE`).
 
-## Deploy (Docker / Coolify)
+## Deploy
+**Vercel:** import the repo; `vercel.json` routes everything to `api/index.py` (the FastAPI app, which also serves the front end). The app runs without pyarrow and scikit-learn, reading the light copies made by `scripts/export_slim_runtime.py`, so the bundle stays under Vercel's 500 MB limit. Bundle ≈ 380 MB, memory ≈ 1.6 GB (fits the 2 GB default). Results are identical to the local app; uploads get BTS aircraft-rotation context for the 2025 test months. Set `TYPESAFE_API_KEY` in the project's environment variables for live Jev briefs. The decision log lives in `/tmp` and resets between cold starts.
+
+### Docker / Coolify
 The image serves the web app only; models and the data it reads are prebuilt in `data/` and committed.
 ```bash
 docker build -t gatehold .
@@ -161,6 +164,8 @@ docker run -p 8600:8600 gatehold                # → http://localhost:8600
 | `scripts/export_feature_store.py` | Airport-hour feature store (2023–2025) used to score uploaded flights |
 | `app/server.py` · `app/web/` | FastAPI + D3 web app (front page, Flights at risk, Try the model, Capacity outlook, Performance, Impact, Data) |
 | `JUDGING.md` · `PITCH.md` · `PLAN.md` | Rubric self-assessment · 3-minute demo script · plan and research notes |
-| `Dockerfile` · `requirements-app.txt` | Web-app container (Coolify-ready) and its runtime dependencies |
+| `Dockerfile` · `vercel.json` · `api/index.py` | Deploy the web app (Docker/Coolify or Vercel) |
+| `requirements.txt` · `requirements-pipeline.txt` | App runtime (no pyarrow / scikit-learn) · full training pipeline |
+| `scripts/export_slim_runtime.py` | Light copies of app data (gzip pickles, JSON calibrators, small extracts) so the app fits a serverless bundle |
 
 *Data: organisers' Challenge 5 files (hourly weather ATL/DFW, data guide; fetched by `download_data.py --only challenge`); Meteostat; US DOT BTS On-Time Performance; Iowa Environmental Mesonet (METAR, TAF, LAMP archives); NOAA NCEI Storm Events; OurAirports. Fuel and cost assumptions: EUROCONTROL Standard Inputs v10, Airlines for America (2024).*
