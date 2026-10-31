@@ -141,7 +141,7 @@ flowchart LR
 MIT (see `LICENSE`).
 
 ## Deploy
-**Vercel:** import the repo; `vercel.json` routes everything to `api/index.py` (the FastAPI app, which also serves the front end). The app runs without pyarrow and scikit-learn, reading the light copies made by `scripts/export_slim_runtime.py`, so the bundle stays under Vercel's 500 MB limit. Bundle ≈ 380 MB, memory ≈ 1.6 GB (fits the 2 GB default). Results are identical to the local app; uploads get BTS aircraft-rotation context for the 2025 test months. Set `TYPESAFE_API_KEY` in the project's environment variables for live Jev briefs. The decision log lives in `/tmp` and resets between cold starts.
+**Vercel:** import the repo; Vercel detects the FastAPI app in `app/server.py` (which also serves the front end), and `.vercelignore` keeps the bundle small. The app runs without pyarrow and scikit-learn, reading the light copies made by `scripts/export_slim_runtime.py`, so the bundle stays under Vercel's 500 MB limit. Bundle ≈ 380 MB, memory ≈ 1.6 GB (fits the 2 GB default). Results are identical to the local app; uploads get BTS aircraft-rotation context for the 2025 test months. Set `TYPESAFE_API_KEY` in the project's environment variables for live Jev briefs. The decision log lives in `/tmp` and resets between cold starts.
 
 ### Docker / Coolify
 The image serves the web app only; models and the data it reads are prebuilt in `data/` and committed.
@@ -164,7 +164,7 @@ docker run -p 8600:8600 gatehold                # → http://localhost:8600
 | `scripts/export_feature_store.py` | Airport-hour feature store (2023–2025) used to score uploaded flights |
 | `app/server.py` · `app/web/` | FastAPI + D3 web app (front page, Flights at risk, Try the model, Capacity outlook, Performance, Impact, Data) |
 | `JUDGING.md` · `PITCH.md` · `PLAN.md` | Rubric self-assessment · 3-minute demo script · plan and research notes |
-| `Dockerfile` · `vercel.json` · `api/index.py` | Deploy the web app (Docker/Coolify or Vercel) |
+| `Dockerfile` · `.vercelignore` · `vendor/` | Deploy the web app (Docker/Coolify or Vercel; vendor holds the OpenMP runtime Vercel lacks) |
 | `requirements.txt` · `requirements-pipeline.txt` | App runtime (no pyarrow / scikit-learn) · full training pipeline |
 | `scripts/export_slim_runtime.py` | Light copies of app data (gzip pickles, JSON calibrators, small extracts) so the app fits a serverless bundle |
 
