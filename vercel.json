@@ -4,7 +4,7 @@
     "api/index.py": {
       "memory": 2048,
       "maxDuration": 60,
-      "excludeFiles": "{.venv/**,.git/**,.taste-skill/**,logs/**,docs/**,assets/**,*.ipynb,*.pdf,Flight_Data_With_Weather_Final.csv,data/external/bts/**/*.parquet,data/external/lamp/**,data/external/taf/**,data/external/storms/**,data/external/ourairports/airports.csv,data/model/*.parquet,data/model/*.joblib,data/processed/*.parquet,data/processed/flights_clean_all*,data/processed/flights_clean_hubs.csv,data/processed/weather_hourly_from_dataset*,data/processed/hub_metar_hourly*,data/challenge/*.pdf,data/challenge/*.xlsx,data/external/meteostat/*.parquet}"
+      "excludeFiles": "{.venv/**,.git/**,.taste-skill/**,logs/**,docs/**,*.ipynb,*.pdf,**/*.parquet,**/*.joblib,Flight_Data_With_Weather_Final.csv}"
     }
   },
   "rewrites": [{ "source": "/(.*)", "destination": "/api/index" }]
